@@ -195,7 +195,7 @@ object Main {
           val values = doc.flatMap("div.col-md-6.file-info > ul > li").map(_.text)
           val keyVals = key.zip(values).map(a => a._1.toLowerCase -> a._2.stripPrefix(": ")).toMap
 
-          val encryption = keyVals("encryption") match {
+          val encryption = keyVals("encryption").toLowerCase match {
             case "yes" => true
             case "no" => false
           }
