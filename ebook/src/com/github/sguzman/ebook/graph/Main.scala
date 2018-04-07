@@ -36,6 +36,10 @@ object Main {
     scribe.info("Wrote items.msg")
   }
 
+  Runtime.getRuntime.addShutdownHook(new Thread(() => {
+    writeItemCache()
+  }))
+
   implicit final class DocWrap(doc: Browser#DocumentType) {
     def map(s: String, a: String = ""): Element = doc.>?>(element(s)) match {
       case Some(v) => v
