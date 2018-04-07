@@ -220,6 +220,7 @@ object Main {
                 val split = keyVals.getOrElse("page size", "-1 x -1 px")
                   .stripSuffix(" (letter)")
                   .stripSuffix(" (A4)")
+                  .stripSuffix(" (A5)")
                   .split(" ")
 
                 val height = split.head.toFloat
