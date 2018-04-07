@@ -67,9 +67,18 @@ message Hosting {
     string md5 = 13;
 }
 
+message StoreEbook {
+    Ebook book = 1;
+    Hosting host = 2;
+}
+
 message ItemStore {
     repeated Link links = 1;
     map<string, Ebook> books = 2;
     map<string, Link> host = 3;
     map<string, Hosting> rapidHost = 4;
+}
+
+message Store {
+    repeated StoreEbook store = 1;
 }
