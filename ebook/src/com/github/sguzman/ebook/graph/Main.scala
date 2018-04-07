@@ -142,8 +142,8 @@ object Main {
 
           val relatedPosts = doc.flatMap("li.related-article > article.post > figure.post-thumbnail > a[href]").map(_.attr("href"))
           val categories = doc.flatMap("div.btm-post-meta > p.post-btm-cats > a[href]").map(_.text)
-          val prev = doc.map("li.prev > a[href]").attr("href")
-          val next = doc.map("li.next > a[href]").attr("href")
+          val prev = doc.maybe("li.prev > a[href]").map(_.attr("href")).getOrElse("")
+          val next = doc.maybe("li.next > a[href]").map(_.attr("href")).getOrElse("")
 
           Ebook(
             title,
