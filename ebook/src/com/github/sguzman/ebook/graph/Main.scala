@@ -2,7 +2,7 @@ package com.github.sguzman.ebook.graph
 
 import java.io.{File, FileInputStream, FileOutputStream}
 
-import com.github.sguzman.ebook.graph.protoc.items.{ItemStore, Link}
+import com.github.sguzman.ebook.graph.protoc.items._
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.model.Element
@@ -62,7 +62,6 @@ object Main {
   trait Cacheable[B] {
     def contains(s: String): Boolean
     def apply(s: String): B
-    def put(s: String, b: B): Unit
   }
 
   def get[A <: Cacheable[B], B](url: String, cache: A) (f: Browser#DocumentType => B): B =
@@ -75,25 +74,21 @@ object Main {
       val html = HttpUtil.retryHttpGet(url)
       val result = f(html.doc)
       scribe.info(s"Got key $url -> $result")
-      cache.put(url, result)
       result
     } else {
       val html = HttpUtil.retryHttpGet(url)
       val result = f(html.doc)
       scribe.info(s"After HTTP request, got key $url -> $result")
-      cache.put(url, result)
       result
     }
 
-  def get[A](s: String)
+  def extract[A](s: String)
             (cont: String => Boolean)
             (appl: String => A)
-            (pu: (String, A) => Unit)
             (f: Browser#DocumentType => A): A =
     get[Cacheable[A], A](s, new Cacheable[A] {
       override def contains(s: String): Boolean = cont(s)
       override def apply(s: String): A = appl(s)
-      override def put(s: String, b: A): Unit = pu(s, b)
     }) (f)
 
   def main(args: Array[String]): Unit = {
@@ -112,6 +107,64 @@ object Main {
       }.toList
 
       itemCache = itemCache.addAllLinks(links)
+    }
+
+    locally {
+      val cache = itemCache.books
+      itemCache.links.par.map{a =>
+
+        extract(a.link)(cache.contains)(cache.apply) {doc =>
+          val title = doc.map("h1.post-title").text
+          val date = doc.map("time.post-date").text
+          val img = doc.map("div.book-cover > img[src]").attr("src")
+          val id = doc.map("""article[id=^"post"]""").attr("id").stripPrefix("post-")
+          val desc = doc.map("div.entry-inner").text
+
+          val details = doc.flatMap("div.book-details > ul > li > span").map(_.text)
+          val detailVals = doc.flatMap("div.book-details > ul > li").map(_.text)
+          val detailMap = details.zip(detailVals).map(b => (b._1.trim.stripSuffix(":").toLowerCase, b._2.stripPrefix(b._1))).toMap
+
+          val publisher = detailMap("publishers")
+          val author = detailMap("authors")
+          val pubDate = detailMap("publication date")
+          val isbn10 = detailMap("isbn-10")
+          val isbn13 = detailMap("isbn-13")
+          val pages = detailMap("pages").stripSuffix(" pages")
+          val format = detailMap("format")
+          val size = detailMap("size").init.init.toString
+          val sizeType = detailMap("size").stripPrefix(size) match {
+            case "K" | "K" => Size.Types.Kb
+            case "M" | "m" => Size.Types.Mb
+            case "G" | "g" => Size.Types.Gb
+          }
+
+          val relatedPosts = doc.flatMap("li.related-article > article.post > figure.post-thumbnail > a[href]").map(_.attr("href"))
+          val categories = doc.flatMap("div.btm-post-meta > p.post-btm-cats > a[href]").map(_.text)
+          val prev = doc.map("li.prev > a[href]").attr("href")
+          val next = doc.map("li.next > a[href]").attr("href")
+
+          Ebook(
+            date,
+            img,
+            desc,
+            id.toInt,
+            Some(Details(
+              author,
+              pubDate,
+              isbn10,
+              isbn13,
+              publisher,
+              pages.toInt,
+              format,
+              Some(Size(size.toInt, sizeType))
+            )),
+            categories,
+            relatedPosts.map(b => Link(b)),
+            prev,
+            next
+          )
+        }
+      }
     }
 
     scribe.info("done")
