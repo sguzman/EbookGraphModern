@@ -190,7 +190,7 @@ object Main {
       val cache = itemCache.rapidHost
       itemCache.host.par.map(_._2.link).foreach{a =>
         extract(a)(cache.contains)(cache.apply)((a, b) => itemCache = itemCache.addRapidHost((a, b))) {doc =>
-          val topTitle = doc.map("div.col-md-6.file-info > h1").text
+          val topTitle = doc.map("h1").text
           val key = doc.flatMap("div.col-md-6.file-info > ul > li > span").map(_.text)
           val values = doc.flatMap("div.col-md-6.file-info > ul > li").map(_.text)
           val keyVals = key.zip(values).map(a => a._1.toLowerCase -> a._2.stripPrefix(a._1).stripPrefix(": ")).toMap
