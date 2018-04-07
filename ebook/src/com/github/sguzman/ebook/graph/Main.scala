@@ -113,5 +113,7 @@ object Main {
 
       itemCache = itemCache.addAllLinks(links)
     }
+
+    scribe.info("done")
   }
 }
