@@ -116,7 +116,7 @@ object Main {
           val title = doc.map("h1.post-title").text
           val date = doc.map("time.post-date").text
           val img = doc.map("div.book-cover > img[src]").attr("src")
-          val id = doc.map("""article[id=^"post"]""").attr("id").stripPrefix("post-")
+          val id = doc.map("""article[id^="post"]""").attr("id").stripPrefix("post-")
           val desc = doc.map("div.entry-inner").text
 
           val details = doc.flatMap("div.book-details > ul > li > span").map(_.text)
