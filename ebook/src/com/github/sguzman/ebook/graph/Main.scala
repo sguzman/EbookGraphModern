@@ -201,7 +201,7 @@ object Main {
           }
 
           val pageSize = identity {
-            val split = keyVals.getOrElse("page size", "-1 x -1 px").split(" ")
+            val split = keyVals.getOrElse("page size", "-1 x -1 px").stripSuffix(" (letter)").split(" ")
             val height = split.head.toFloat
             val width = split(2).toFloat
             val units = split.last.toLowerCase match {
