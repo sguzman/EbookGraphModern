@@ -113,14 +113,6 @@ object ebook extends ScalaModule {
     MavenRepository("https://jcenter.bintray.com")
   )
 
-  /** Non maven dependencies */
-  def unmanagedClasspath = Agg(
-    mill.modules.Util.download(
-      "https://github.com/sguzman/BrotliExec/releases/download/v1.0.1/com.github.sguzman.brotli.brotliexec.1.0.1.jar",
-      "com.github.sguzman.brotliexec.1.0.1.jar"
-    )
-  )
-
   /** Ivy dependencies */
   def ivyDeps = Agg(
     ivy"org.scalaj::scalaj-http:2.3.0",
