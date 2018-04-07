@@ -2,6 +2,7 @@ package com.github.sguzman.ebook.graph
 
 import java.io.{File, FileInputStream, FileOutputStream}
 
+import com.github.sguzman.ebook.graph.protoc.items.PageDimension.Units
 import com.github.sguzman.ebook.graph.protoc.items._
 import com.google.protobuf.ByteString
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
@@ -189,6 +190,44 @@ object Main {
       val cache = itemCache.rapidHost
       itemCache.host.par.map(_._2.link).foreach{a =>
         extract(a)(cache.contains)(cache.apply)((a, b) => itemCache = itemCache.addRapidHost((a, b))) {doc =>
+          val topTitle = doc.map("div.col-md-6.file-info > h1").text
+          val key = doc.flatMap("div.col-md-6.file-info > ul > li > span").map(_.text)
+          val values = doc.flatMap("div.col-md-6.file-info > ul > li").map(_.text)
+          val keyVals = key.zip(values).map(a => a._1.toLowerCase -> a._2.stripPrefix(": ")).toMap
+
+          val encryption = keyVals("encryption") match {
+            case "yes" => true
+            case "no" => false
+          }
+
+          val fileSize = identity {
+            val split = keyVals("file size").split(" ")
+            val height = split.head.toFloat
+            val width = split(2).toFloat
+            val units = split.last.toLowerCase match {
+              case "pts" => Units.PTS
+              case "px" | "pixels" => Units.PX
+              case "inch" | "inches" => Units.INCH
+            }
+
+            PageDimension(height, width, units)
+          }
+
+          Hosting(
+            topTitle,
+            keyVals("file type"),
+            keyVals("title"),
+            keyVals("author"),
+            keyVals("creator"),
+            keyVals("producer"),
+            keyVals("creation date"),
+            keyVals("modification date"),
+            keyVals("pages").toInt,
+            encryption,
+            Some(fileSize),
+            keyVals("page size").stripSuffix(" bytes").toInt,
+            keyVals("md5 checksum")
+          )
 
         }
       }
