@@ -9,7 +9,7 @@ package com.github.sguzman.ebook.graph.protoc.items
 final case class ItemStore(
     links: _root_.scala.collection.Seq[com.github.sguzman.ebook.graph.protoc.items.Link] = _root_.scala.collection.Seq.empty,
     books: scala.collection.immutable.Map[_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Ebook] = scala.collection.immutable.Map.empty,
-    host: scala.collection.immutable.Map[_root_.scala.Int, com.github.sguzman.ebook.graph.protoc.items.Link] = scala.collection.immutable.Map.empty
+    host: scala.collection.immutable.Map[_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Link] = scala.collection.immutable.Map.empty
     ) extends scalapb.GeneratedMessage with scalapb.Message[ItemStore] with scalapb.lenses.Updatable[ItemStore] {
     @transient
     private[this] var __serializedSizeCachedValue: _root_.scala.Int = 0
@@ -48,7 +48,7 @@ final case class ItemStore(
     def mergeFrom(`_input__`: _root_.com.google.protobuf.CodedInputStream): com.github.sguzman.ebook.graph.protoc.items.ItemStore = {
       val __links = (_root_.scala.collection.immutable.Vector.newBuilder[com.github.sguzman.ebook.graph.protoc.items.Link] ++= this.links)
       val __books = (scala.collection.immutable.Map.newBuilder[_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Ebook] ++= this.books)
-      val __host = (scala.collection.immutable.Map.newBuilder[_root_.scala.Int, com.github.sguzman.ebook.graph.protoc.items.Link] ++= this.host)
+      val __host = (scala.collection.immutable.Map.newBuilder[_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Link] ++= this.host)
       var _done__ = false
       while (!_done__) {
         val _tag__ = _input__.readTag()
@@ -78,9 +78,9 @@ final case class ItemStore(
     def addAllBooks(__vs: TraversableOnce[(_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Ebook)]): ItemStore = copy(books = books ++ __vs)
     def withBooks(__v: scala.collection.immutable.Map[_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Ebook]): ItemStore = copy(books = __v)
     def clearHost = copy(host = scala.collection.immutable.Map.empty)
-    def addHost(__vs: (_root_.scala.Int, com.github.sguzman.ebook.graph.protoc.items.Link)*): ItemStore = addAllHost(__vs)
-    def addAllHost(__vs: TraversableOnce[(_root_.scala.Int, com.github.sguzman.ebook.graph.protoc.items.Link)]): ItemStore = copy(host = host ++ __vs)
-    def withHost(__v: scala.collection.immutable.Map[_root_.scala.Int, com.github.sguzman.ebook.graph.protoc.items.Link]): ItemStore = copy(host = __v)
+    def addHost(__vs: (_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Link)*): ItemStore = addAllHost(__vs)
+    def addAllHost(__vs: TraversableOnce[(_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Link)]): ItemStore = copy(host = host ++ __vs)
+    def withHost(__v: scala.collection.immutable.Map[_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Link]): ItemStore = copy(host = __v)
     def getFieldByNumber(__fieldNumber: _root_.scala.Int): scala.Any = {
       (__fieldNumber: @_root_.scala.unchecked) match {
         case 1 => links
@@ -262,14 +262,14 @@ object ItemStore extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eb
   
   @SerialVersionUID(0L)
   final case class HostEntry(
-      key: _root_.scala.Int = 0,
+      key: _root_.scala.Predef.String = "",
       value: scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link] = None
       ) extends scalapb.GeneratedMessage with scalapb.Message[HostEntry] with scalapb.lenses.Updatable[HostEntry] {
       @transient
       private[this] var __serializedSizeCachedValue: _root_.scala.Int = 0
       private[this] def __computeSerializedValue(): _root_.scala.Int = {
         var __size = 0
-        if (key != 0) { __size += _root_.com.google.protobuf.CodedOutputStream.computeUInt32Size(1, key) }
+        if (key != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(1, key) }
         if (value.isDefined) { __size += 1 + _root_.com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(value.get.serializedSize) + value.get.serializedSize }
         __size
       }
@@ -284,8 +284,8 @@ object ItemStore extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eb
       def writeTo(`_output__`: _root_.com.google.protobuf.CodedOutputStream): Unit = {
         {
           val __v = key
-          if (__v != 0) {
-            _output__.writeUInt32(1, __v)
+          if (__v != "") {
+            _output__.writeString(1, __v)
           }
         };
         value.foreach { __v =>
@@ -302,8 +302,8 @@ object ItemStore extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eb
           val _tag__ = _input__.readTag()
           _tag__ match {
             case 0 => _done__ = true
-            case 8 =>
-              __key = _input__.readUInt32()
+            case 10 =>
+              __key = _input__.readString()
             case 18 =>
               __value = Option(_root_.scalapb.LiteParser.readMessage(_input__, __value.getOrElse(com.github.sguzman.ebook.graph.protoc.items.Link.defaultInstance)))
             case tag => _input__.skipField(tag)
@@ -314,7 +314,7 @@ object ItemStore extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eb
             value = __value
         )
       }
-      def withKey(__v: _root_.scala.Int): HostEntry = copy(key = __v)
+      def withKey(__v: _root_.scala.Predef.String): HostEntry = copy(key = __v)
       def getValue: com.github.sguzman.ebook.graph.protoc.items.Link = value.getOrElse(com.github.sguzman.ebook.graph.protoc.items.Link.defaultInstance)
       def clearValue: HostEntry = copy(value = None)
       def withValue(__v: com.github.sguzman.ebook.graph.protoc.items.Link): HostEntry = copy(value = Option(__v))
@@ -322,7 +322,7 @@ object ItemStore extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eb
         (__fieldNumber: @_root_.scala.unchecked) match {
           case 1 => {
             val __t = key
-            if (__t != 0) __t else null
+            if (__t != "") __t else null
           }
           case 2 => value.orNull
         }
@@ -330,7 +330,7 @@ object ItemStore extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eb
       def getField(__field: _root_.scalapb.descriptors.FieldDescriptor): _root_.scalapb.descriptors.PValue = {
         require(__field.containingMessage eq companion.scalaDescriptor)
         (__field.number: @_root_.scala.unchecked) match {
-          case 1 => _root_.scalapb.descriptors.PInt(key)
+          case 1 => _root_.scalapb.descriptors.PString(key)
           case 2 => value.map(_.toPMessage).getOrElse(_root_.scalapb.descriptors.PEmpty)
         }
       }
@@ -344,7 +344,7 @@ object ItemStore extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eb
       require(__fieldsMap.keys.forall(_.getContainingType() == javaDescriptor), "FieldDescriptor does not match message type.")
       val __fields = javaDescriptor.getFields
       com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry(
-        __fieldsMap.getOrElse(__fields.get(0), 0).asInstanceOf[_root_.scala.Int],
+        __fieldsMap.getOrElse(__fields.get(0), "").asInstanceOf[_root_.scala.Predef.String],
         __fieldsMap.get(__fields.get(1)).asInstanceOf[scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link]]
       )
     }
@@ -352,7 +352,7 @@ object ItemStore extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eb
       case _root_.scalapb.descriptors.PMessage(__fieldsMap) =>
         require(__fieldsMap.keys.forall(_.containingMessage == scalaDescriptor), "FieldDescriptor does not match message type.")
         com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry(
-          __fieldsMap.get(scalaDescriptor.findFieldByNumber(1).get).map(_.as[_root_.scala.Int]).getOrElse(0),
+          __fieldsMap.get(scalaDescriptor.findFieldByNumber(1).get).map(_.as[_root_.scala.Predef.String]).getOrElse(""),
           __fieldsMap.get(scalaDescriptor.findFieldByNumber(2).get).flatMap(_.as[scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link]])
         )
       case _ => throw new RuntimeException("Expected PMessage")
@@ -371,20 +371,20 @@ object ItemStore extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eb
     lazy val defaultInstance = com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry(
     )
     implicit class HostEntryLens[UpperPB](_l: _root_.scalapb.lenses.Lens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry]) extends _root_.scalapb.lenses.ObjectLens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry](_l) {
-      def key: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Int] = field(_.key)((c_, f_) => c_.copy(key = f_))
+      def key: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.key)((c_, f_) => c_.copy(key = f_))
       def value: _root_.scalapb.lenses.Lens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.Link] = field(_.getValue)((c_, f_) => c_.copy(value = Option(f_)))
       def optionalValue: _root_.scalapb.lenses.Lens[UpperPB, scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link]] = field(_.value)((c_, f_) => c_.copy(value = f_))
     }
     final val KEY_FIELD_NUMBER = 1
     final val VALUE_FIELD_NUMBER = 2
-    implicit val keyValueMapper: _root_.scalapb.TypeMapper[com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry, (_root_.scala.Int, com.github.sguzman.ebook.graph.protoc.items.Link)] =
-      _root_.scalapb.TypeMapper[com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry, (_root_.scala.Int, com.github.sguzman.ebook.graph.protoc.items.Link)](__m => (__m.key, __m.getValue))(__p => com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry(__p._1, Some(__p._2)))
+    implicit val keyValueMapper: _root_.scalapb.TypeMapper[com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry, (_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Link)] =
+      _root_.scalapb.TypeMapper[com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry, (_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Link)](__m => (__m.key, __m.getValue))(__p => com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry(__p._1, Some(__p._2)))
   }
   
   implicit class ItemStoreLens[UpperPB](_l: _root_.scalapb.lenses.Lens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.ItemStore]) extends _root_.scalapb.lenses.ObjectLens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.ItemStore](_l) {
     def links: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.collection.Seq[com.github.sguzman.ebook.graph.protoc.items.Link]] = field(_.links)((c_, f_) => c_.copy(links = f_))
     def books: _root_.scalapb.lenses.Lens[UpperPB, scala.collection.immutable.Map[_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Ebook]] = field(_.books)((c_, f_) => c_.copy(books = f_))
-    def host: _root_.scalapb.lenses.Lens[UpperPB, scala.collection.immutable.Map[_root_.scala.Int, com.github.sguzman.ebook.graph.protoc.items.Link]] = field(_.host)((c_, f_) => c_.copy(host = f_))
+    def host: _root_.scalapb.lenses.Lens[UpperPB, scala.collection.immutable.Map[_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Link]] = field(_.host)((c_, f_) => c_.copy(host = f_))
   }
   final val LINKS_FIELD_NUMBER = 1
   final val BOOKS_FIELD_NUMBER = 2
@@ -392,5 +392,5 @@ object ItemStore extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eb
   @transient
   private val _typemapper_books: _root_.scalapb.TypeMapper[com.github.sguzman.ebook.graph.protoc.items.ItemStore.BooksEntry, (_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Ebook)] = implicitly[_root_.scalapb.TypeMapper[com.github.sguzman.ebook.graph.protoc.items.ItemStore.BooksEntry, (_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Ebook)]]
   @transient
-  private val _typemapper_host: _root_.scalapb.TypeMapper[com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry, (_root_.scala.Int, com.github.sguzman.ebook.graph.protoc.items.Link)] = implicitly[_root_.scalapb.TypeMapper[com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry, (_root_.scala.Int, com.github.sguzman.ebook.graph.protoc.items.Link)]]
+  private val _typemapper_host: _root_.scalapb.TypeMapper[com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry, (_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Link)] = implicitly[_root_.scalapb.TypeMapper[com.github.sguzman.ebook.graph.protoc.items.ItemStore.HostEntry, (_root_.scala.Predef.String, com.github.sguzman.ebook.graph.protoc.items.Link)]]
 }

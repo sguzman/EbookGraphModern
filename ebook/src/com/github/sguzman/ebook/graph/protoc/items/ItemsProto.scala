@@ -34,7 +34,7 @@ object ItemsProto extends _root_.scalapb.GeneratedFileObject {
   kl0ZW1TdG9yZS5Cb29rc0VudHJ5UgVib29rcxJOCgRob3N0GAMgAygLMjouY29tLmdpdGh1Yi5zZ3V6bWFuLmVib29rLmdyYXBoL
   nByb3RvYy5JdGVtU3RvcmUuSG9zdEVudHJ5UgRob3N0GmYKCkJvb2tzRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSQgoFdmFsdWUYA
   iABKAsyLC5jb20uZ2l0aHViLnNndXptYW4uZWJvb2suZ3JhcGgucHJvdG9jLkVib29rUgV2YWx1ZToCOAEaZAoJSG9zdEVudHJ5E
-  hAKA2tleRgBIAEoDVIDa2V5EkEKBXZhbHVlGAIgASgLMisuY29tLmdpdGh1Yi5zZ3V6bWFuLmVib29rLmdyYXBoLnByb3RvYy5Ma
+  hAKA2tleRgBIAEoCVIDa2V5EkEKBXZhbHVlGAIgASgLMisuY29tLmdpdGh1Yi5zZ3V6bWFuLmVib29rLmdyYXBoLnByb3RvYy5Ma
   W5rUgV2YWx1ZToCOAFiBnByb3RvMw=="""
       ).mkString)
   lazy val scalaDescriptor: _root_.scalapb.descriptors.FileDescriptor = {
