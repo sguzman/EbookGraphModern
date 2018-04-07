@@ -5,6 +5,9 @@ import java.io.{File, FileInputStream, FileOutputStream}
 import com.github.sguzman.ebook.graph.protoc.items.ItemStore
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
 import net.ruippeixotog.scalascraper.model.Element
+import net.ruippeixotog.scalascraper.dsl.DSL._
+import net.ruippeixotog.scalascraper.scraper.ContentExtractors.element
+import net.ruippeixotog.scalascraper.scraper.ContentExtractors.elementList
 import org.apache.commons.lang3.StringUtils
 
 object Main {
