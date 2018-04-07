@@ -40,8 +40,35 @@ message Ebook {
     Link next = 10;
 }
 
+message PageDimension {
+    float height = 1;
+    float width = 2;
+    enum Units {
+        PTS = 0;
+        PX = 1;
+        INCH = 2;
+    }
+    Units units = 3;
+}
+
+message Hosting {
+    string fileType = 1;
+    string title = 2;
+    string author = 3;
+    string creator = 4;
+    string producer = 5;
+    string creationDate = 6;
+    string modDate = 7;
+    uint32 pages = 8;
+    bool encrypted = 9;
+    PageDimension dim = 10;
+    uint32 size = 11;
+    string md5 = 12;
+}
+
 message ItemStore {
     repeated Link links = 1;
     map<string, Ebook> books = 2;
     map<string, Link> host = 3;
+    map<string, Hosting> rapidHost = 4;
 }
