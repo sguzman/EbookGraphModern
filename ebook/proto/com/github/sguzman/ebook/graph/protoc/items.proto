@@ -41,4 +41,5 @@ message Ebook {
 
 message ItemStore {
     repeated Link links = 1;
+    map<string, Ebook> books = 2;
 }
