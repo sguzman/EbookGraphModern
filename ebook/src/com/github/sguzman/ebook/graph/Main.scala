@@ -37,6 +37,18 @@ object Main {
     scribe.info("Wrote items.msg")
   }
 
+  var storeCache: Store = Store(Seq())
+
+  def writeStoreCache(): Unit = {
+    scribe.info("Writing store.msg...")
+    val file = new File("./store.msg")
+    val output = new FileOutputStream(file)
+    itemCache.writeTo(output)
+    output.close()
+
+    scribe.info("Wrote store.msg")
+  }
+
   Runtime.getRuntime.addShutdownHook(new Thread(() => {
     writeItemCache()
   }))
@@ -242,6 +254,19 @@ object Main {
 
         }
       }
+    }
+
+    locally {
+      val store = itemCache.links.par.map{a =>
+        val book = itemCache.books(a)
+        val url = s"https://it-eb.com/download.php?id=${book.id}"
+        val host = itemCache.host(url)
+        val hosting = itemCache.rapidHost(host.link)
+        StoreEbook(Some(book), Some(hosting))
+      }.toList
+
+      storeCache = storeCache.addAllStore(store)
+      writeStoreCache()
     }
 
     scribe.info("done")
