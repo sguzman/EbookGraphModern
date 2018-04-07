@@ -2,6 +2,7 @@ package com.github.sguzman.ebook.graph
 
 import java.io.{File, FileInputStream, FileOutputStream}
 
+import com.github.sguzman.ebook.graph.Main.itemCache
 import com.github.sguzman.ebook.graph.protoc.items._
 import com.google.protobuf.ByteString
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
@@ -63,6 +64,7 @@ object Main {
   trait Cacheable[B] {
     def contains(s: String): Boolean
     def apply(s: String): B
+    def put(a: String, b: B): Unit
   }
 
   def get[A <: Cacheable[B], B](url: String, cache: A) (f: Browser#DocumentType => B): B =
@@ -75,21 +77,25 @@ object Main {
       val html = HttpUtil.retryHttpGet(url)
       val result = f(html.doc)
       scribe.info(s"Got key $url -> $result")
+      cache.put(url, result)
       result
     } else {
       val html = HttpUtil.retryHttpGet(url)
       val result = f(html.doc)
       scribe.info(s"After HTTP request, got key $url -> $result")
+      cache.put(url, result)
       result
     }
 
   def extract[A](s: String)
             (cont: String => Boolean)
             (appl: String => A)
+            (put: (String, A) => Unit)
             (f: Browser#DocumentType => A): A =
     get[Cacheable[A], A](s, new Cacheable[A] {
       override def contains(s: String): Boolean = cont(s)
       override def apply(s: String): A = appl(s)
+      override def put(a: String, b: A): A = put(a, b)
     }) (f)
 
   def main(args: Array[String]): Unit = {
@@ -110,7 +116,7 @@ object Main {
     locally {
       val cache = itemCache.books
       itemCache.links.par.foreach{a =>
-        val book = extract(a.link)(cache.contains)(cache.apply) {doc =>
+        val book = extract(a.link)(cache.contains)(cache.apply)((a, b) => itemCache = itemCache.addBooks((a, b))) {doc =>
           val title = doc.map("h1.post-title").text
           val date = (doc.maybe("time.post-date") match {
             case None => doc.map("span.post-date")
