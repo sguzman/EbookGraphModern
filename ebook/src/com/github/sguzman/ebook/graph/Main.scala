@@ -201,7 +201,7 @@ object Main {
             case _: String => throw new Exception(keyVals("encryption"))
           }
 
-          val fileSize = identity {
+          val pageSize = identity {
             val split = keyVals("file size").split(" ")
             val height = split.head.toFloat
             val width = split(2).toFloat
@@ -225,7 +225,7 @@ object Main {
             keyVals("modification date"),
             keyVals("pages").toInt,
             encryption,
-            Some(fileSize),
+            Some(pageSize),
             keyVals("page size").stripSuffix(" bytes").toInt,
             keyVals("md5 checksum")
           )
