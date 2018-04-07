@@ -121,8 +121,8 @@ object ebook extends ScalaModule {
     ivy"com.thesamet.scalapb::compilerplugin:0.7.1",
     ivy"com.thesamet.scalapb::scalapb-runtime:0.7.1",
     ivy"net.ruippeixotog::scala-scraper:2.1.0",
-    ivy"guru.nidi:graphviz-java:0.4.0",
-    ivy"ch.qos.logback:logback-classic:1.2.3"
+    ivy"ch.qos.logback:logback-classic:1.2.3",
+    ivy"org.scala-graph::graph-core:1.12.3"
   )
 
   def forkArgs = Seq("-Xmx4g")
