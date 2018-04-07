@@ -7,7 +7,7 @@ message Link {
 }
 
 message Size {
-    uint32 size = 1;
+    float size = 1;
     enum Types {
         Kb = 0;
         Mb = 1;

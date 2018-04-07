@@ -7,14 +7,14 @@ package com.github.sguzman.ebook.graph.protoc.items
 
 @SerialVersionUID(0L)
 final case class Size(
-    size: _root_.scala.Int = 0,
+    size: _root_.scala.Float = 0.0f,
     `type`: com.github.sguzman.ebook.graph.protoc.items.Size.Types = com.github.sguzman.ebook.graph.protoc.items.Size.Types.Kb
     ) extends scalapb.GeneratedMessage with scalapb.Message[Size] with scalapb.lenses.Updatable[Size] {
     @transient
     private[this] var __serializedSizeCachedValue: _root_.scala.Int = 0
     private[this] def __computeSerializedValue(): _root_.scala.Int = {
       var __size = 0
-      if (size != 0) { __size += _root_.com.google.protobuf.CodedOutputStream.computeUInt32Size(1, size) }
+      if (size != 0.0f) { __size += _root_.com.google.protobuf.CodedOutputStream.computeFloatSize(1, size) }
       if (`type` != com.github.sguzman.ebook.graph.protoc.items.Size.Types.Kb) { __size += _root_.com.google.protobuf.CodedOutputStream.computeEnumSize(2, `type`.value) }
       __size
     }
@@ -29,8 +29,8 @@ final case class Size(
     def writeTo(`_output__`: _root_.com.google.protobuf.CodedOutputStream): Unit = {
       {
         val __v = size
-        if (__v != 0) {
-          _output__.writeUInt32(1, __v)
+        if (__v != 0.0f) {
+          _output__.writeFloat(1, __v)
         }
       };
       {
@@ -48,8 +48,8 @@ final case class Size(
         val _tag__ = _input__.readTag()
         _tag__ match {
           case 0 => _done__ = true
-          case 8 =>
-            __size = _input__.readUInt32()
+          case 13 =>
+            __size = _input__.readFloat()
           case 16 =>
             __type = com.github.sguzman.ebook.graph.protoc.items.Size.Types.fromValue(_input__.readEnum())
           case tag => _input__.skipField(tag)
@@ -60,13 +60,13 @@ final case class Size(
           `type` = __type
       )
     }
-    def withSize(__v: _root_.scala.Int): Size = copy(size = __v)
+    def withSize(__v: _root_.scala.Float): Size = copy(size = __v)
     def withType(__v: com.github.sguzman.ebook.graph.protoc.items.Size.Types): Size = copy(`type` = __v)
     def getFieldByNumber(__fieldNumber: _root_.scala.Int): scala.Any = {
       (__fieldNumber: @_root_.scala.unchecked) match {
         case 1 => {
           val __t = size
-          if (__t != 0) __t else null
+          if (__t != 0.0f) __t else null
         }
         case 2 => {
           val __t = `type`.javaValueDescriptor
@@ -77,7 +77,7 @@ final case class Size(
     def getField(__field: _root_.scalapb.descriptors.FieldDescriptor): _root_.scalapb.descriptors.PValue = {
       require(__field.containingMessage eq companion.scalaDescriptor)
       (__field.number: @_root_.scala.unchecked) match {
-        case 1 => _root_.scalapb.descriptors.PInt(size)
+        case 1 => _root_.scalapb.descriptors.PFloat(size)
         case 2 => _root_.scalapb.descriptors.PEnum(`type`.scalaValueDescriptor)
       }
     }
@@ -91,7 +91,7 @@ object Size extends scalapb.GeneratedMessageCompanion[com.github.sguzman.ebook.g
     require(__fieldsMap.keys.forall(_.getContainingType() == javaDescriptor), "FieldDescriptor does not match message type.")
     val __fields = javaDescriptor.getFields
     com.github.sguzman.ebook.graph.protoc.items.Size(
-      __fieldsMap.getOrElse(__fields.get(0), 0).asInstanceOf[_root_.scala.Int],
+      __fieldsMap.getOrElse(__fields.get(0), 0.0f).asInstanceOf[_root_.scala.Float],
       com.github.sguzman.ebook.graph.protoc.items.Size.Types.fromValue(__fieldsMap.getOrElse(__fields.get(1), com.github.sguzman.ebook.graph.protoc.items.Size.Types.Kb.javaValueDescriptor).asInstanceOf[_root_.com.google.protobuf.Descriptors.EnumValueDescriptor].getNumber)
     )
   }
@@ -99,7 +99,7 @@ object Size extends scalapb.GeneratedMessageCompanion[com.github.sguzman.ebook.g
     case _root_.scalapb.descriptors.PMessage(__fieldsMap) =>
       require(__fieldsMap.keys.forall(_.containingMessage == scalaDescriptor), "FieldDescriptor does not match message type.")
       com.github.sguzman.ebook.graph.protoc.items.Size(
-        __fieldsMap.get(scalaDescriptor.findFieldByNumber(1).get).map(_.as[_root_.scala.Int]).getOrElse(0),
+        __fieldsMap.get(scalaDescriptor.findFieldByNumber(1).get).map(_.as[_root_.scala.Float]).getOrElse(0.0f),
         com.github.sguzman.ebook.graph.protoc.items.Size.Types.fromValue(__fieldsMap.get(scalaDescriptor.findFieldByNumber(2).get).map(_.as[_root_.scalapb.descriptors.EnumValueDescriptor]).getOrElse(com.github.sguzman.ebook.graph.protoc.items.Size.Types.Kb.scalaValueDescriptor).number)
       )
     case _ => throw new RuntimeException("Expected PMessage")
@@ -163,7 +163,7 @@ object Size extends scalapb.GeneratedMessageCompanion[com.github.sguzman.ebook.g
     def scalaDescriptor: _root_.scalapb.descriptors.EnumDescriptor = com.github.sguzman.ebook.graph.protoc.items.Size.scalaDescriptor.enums(0)
   }
   implicit class SizeLens[UpperPB](_l: _root_.scalapb.lenses.Lens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.Size]) extends _root_.scalapb.lenses.ObjectLens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.Size](_l) {
-    def size: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Int] = field(_.size)((c_, f_) => c_.copy(size = f_))
+    def size: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Float] = field(_.size)((c_, f_) => c_.copy(size = f_))
     def `type`: _root_.scalapb.lenses.Lens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.Size.Types] = field(_.`type`)((c_, f_) => c_.copy(`type` = f_))
   }
   final val SIZE_FIELD_NUMBER = 1

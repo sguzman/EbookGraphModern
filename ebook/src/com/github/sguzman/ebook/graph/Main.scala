@@ -153,7 +153,7 @@ object Main {
               publisher,
               pages.toInt,
               format,
-              Some(Size(size.toInt, sizeType))
+              Some(Size(size.toFloat, sizeType))
             )),
             categories,
             relatedPosts.map(b => Link(b)),
