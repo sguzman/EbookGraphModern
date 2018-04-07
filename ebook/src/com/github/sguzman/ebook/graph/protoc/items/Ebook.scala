@@ -15,8 +15,8 @@ final case class Ebook(
     detail: scala.Option[com.github.sguzman.ebook.graph.protoc.items.Details] = None,
     categories: _root_.scala.collection.Seq[_root_.scala.Predef.String] = _root_.scala.collection.Seq.empty,
     links: _root_.scala.collection.Seq[com.github.sguzman.ebook.graph.protoc.items.Link] = _root_.scala.collection.Seq.empty,
-    prev: _root_.scala.Predef.String = "",
-    next: _root_.scala.Predef.String = ""
+    prev: scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link] = None,
+    next: scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link] = None
     ) extends scalapb.GeneratedMessage with scalapb.Message[Ebook] with scalapb.lenses.Updatable[Ebook] {
     @transient
     private[this] var __serializedSizeCachedValue: _root_.scala.Int = 0
@@ -30,8 +30,8 @@ final case class Ebook(
       if (detail.isDefined) { __size += 1 + _root_.com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(detail.get.serializedSize) + detail.get.serializedSize }
       categories.foreach(categories => __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(7, categories))
       links.foreach(links => __size += 1 + _root_.com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(links.serializedSize) + links.serializedSize)
-      if (prev != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(9, prev) }
-      if (next != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(10, next) }
+      if (prev.isDefined) { __size += 1 + _root_.com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(prev.get.serializedSize) + prev.get.serializedSize }
+      if (next.isDefined) { __size += 1 + _root_.com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(next.get.serializedSize) + next.get.serializedSize }
       __size
     }
     final override def serializedSize: _root_.scala.Int = {
@@ -86,17 +86,15 @@ final case class Ebook(
         _output__.writeUInt32NoTag(__v.serializedSize)
         __v.writeTo(_output__)
       };
-      {
-        val __v = prev
-        if (__v != "") {
-          _output__.writeString(9, __v)
-        }
+      prev.foreach { __v =>
+        _output__.writeTag(9, 2)
+        _output__.writeUInt32NoTag(__v.serializedSize)
+        __v.writeTo(_output__)
       };
-      {
-        val __v = next
-        if (__v != "") {
-          _output__.writeString(10, __v)
-        }
+      next.foreach { __v =>
+        _output__.writeTag(10, 2)
+        _output__.writeUInt32NoTag(__v.serializedSize)
+        __v.writeTo(_output__)
       };
     }
     def mergeFrom(`_input__`: _root_.com.google.protobuf.CodedInputStream): com.github.sguzman.ebook.graph.protoc.items.Ebook = {
@@ -132,9 +130,9 @@ final case class Ebook(
           case 66 =>
             __links += _root_.scalapb.LiteParser.readMessage(_input__, com.github.sguzman.ebook.graph.protoc.items.Link.defaultInstance)
           case 74 =>
-            __prev = _input__.readString()
+            __prev = Option(_root_.scalapb.LiteParser.readMessage(_input__, __prev.getOrElse(com.github.sguzman.ebook.graph.protoc.items.Link.defaultInstance)))
           case 82 =>
-            __next = _input__.readString()
+            __next = Option(_root_.scalapb.LiteParser.readMessage(_input__, __next.getOrElse(com.github.sguzman.ebook.graph.protoc.items.Link.defaultInstance)))
           case tag => _input__.skipField(tag)
         }
       }
@@ -167,8 +165,12 @@ final case class Ebook(
     def addLinks(__vs: com.github.sguzman.ebook.graph.protoc.items.Link*): Ebook = addAllLinks(__vs)
     def addAllLinks(__vs: TraversableOnce[com.github.sguzman.ebook.graph.protoc.items.Link]): Ebook = copy(links = links ++ __vs)
     def withLinks(__v: _root_.scala.collection.Seq[com.github.sguzman.ebook.graph.protoc.items.Link]): Ebook = copy(links = __v)
-    def withPrev(__v: _root_.scala.Predef.String): Ebook = copy(prev = __v)
-    def withNext(__v: _root_.scala.Predef.String): Ebook = copy(next = __v)
+    def getPrev: com.github.sguzman.ebook.graph.protoc.items.Link = prev.getOrElse(com.github.sguzman.ebook.graph.protoc.items.Link.defaultInstance)
+    def clearPrev: Ebook = copy(prev = None)
+    def withPrev(__v: com.github.sguzman.ebook.graph.protoc.items.Link): Ebook = copy(prev = Option(__v))
+    def getNext: com.github.sguzman.ebook.graph.protoc.items.Link = next.getOrElse(com.github.sguzman.ebook.graph.protoc.items.Link.defaultInstance)
+    def clearNext: Ebook = copy(next = None)
+    def withNext(__v: com.github.sguzman.ebook.graph.protoc.items.Link): Ebook = copy(next = Option(__v))
     def getFieldByNumber(__fieldNumber: _root_.scala.Int): scala.Any = {
       (__fieldNumber: @_root_.scala.unchecked) match {
         case 1 => {
@@ -194,14 +196,8 @@ final case class Ebook(
         case 6 => detail.orNull
         case 7 => categories
         case 8 => links
-        case 9 => {
-          val __t = prev
-          if (__t != "") __t else null
-        }
-        case 10 => {
-          val __t = next
-          if (__t != "") __t else null
-        }
+        case 9 => prev.orNull
+        case 10 => next.orNull
       }
     }
     def getField(__field: _root_.scalapb.descriptors.FieldDescriptor): _root_.scalapb.descriptors.PValue = {
@@ -215,8 +211,8 @@ final case class Ebook(
         case 6 => detail.map(_.toPMessage).getOrElse(_root_.scalapb.descriptors.PEmpty)
         case 7 => _root_.scalapb.descriptors.PRepeated(categories.map(_root_.scalapb.descriptors.PString)(_root_.scala.collection.breakOut))
         case 8 => _root_.scalapb.descriptors.PRepeated(links.map(_.toPMessage)(_root_.scala.collection.breakOut))
-        case 9 => _root_.scalapb.descriptors.PString(prev)
-        case 10 => _root_.scalapb.descriptors.PString(next)
+        case 9 => prev.map(_.toPMessage).getOrElse(_root_.scalapb.descriptors.PEmpty)
+        case 10 => next.map(_.toPMessage).getOrElse(_root_.scalapb.descriptors.PEmpty)
       }
     }
     def toProtoString: _root_.scala.Predef.String = _root_.scalapb.TextFormat.printToUnicodeString(this)
@@ -237,8 +233,8 @@ object Ebook extends scalapb.GeneratedMessageCompanion[com.github.sguzman.ebook.
       __fieldsMap.get(__fields.get(5)).asInstanceOf[scala.Option[com.github.sguzman.ebook.graph.protoc.items.Details]],
       __fieldsMap.getOrElse(__fields.get(6), Nil).asInstanceOf[_root_.scala.collection.Seq[_root_.scala.Predef.String]],
       __fieldsMap.getOrElse(__fields.get(7), Nil).asInstanceOf[_root_.scala.collection.Seq[com.github.sguzman.ebook.graph.protoc.items.Link]],
-      __fieldsMap.getOrElse(__fields.get(8), "").asInstanceOf[_root_.scala.Predef.String],
-      __fieldsMap.getOrElse(__fields.get(9), "").asInstanceOf[_root_.scala.Predef.String]
+      __fieldsMap.get(__fields.get(8)).asInstanceOf[scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link]],
+      __fieldsMap.get(__fields.get(9)).asInstanceOf[scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link]]
     )
   }
   implicit def messageReads: _root_.scalapb.descriptors.Reads[com.github.sguzman.ebook.graph.protoc.items.Ebook] = _root_.scalapb.descriptors.Reads{
@@ -253,8 +249,8 @@ object Ebook extends scalapb.GeneratedMessageCompanion[com.github.sguzman.ebook.
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(6).get).flatMap(_.as[scala.Option[com.github.sguzman.ebook.graph.protoc.items.Details]]),
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(7).get).map(_.as[_root_.scala.collection.Seq[_root_.scala.Predef.String]]).getOrElse(_root_.scala.collection.Seq.empty),
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(8).get).map(_.as[_root_.scala.collection.Seq[com.github.sguzman.ebook.graph.protoc.items.Link]]).getOrElse(_root_.scala.collection.Seq.empty),
-        __fieldsMap.get(scalaDescriptor.findFieldByNumber(9).get).map(_.as[_root_.scala.Predef.String]).getOrElse(""),
-        __fieldsMap.get(scalaDescriptor.findFieldByNumber(10).get).map(_.as[_root_.scala.Predef.String]).getOrElse("")
+        __fieldsMap.get(scalaDescriptor.findFieldByNumber(9).get).flatMap(_.as[scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link]]),
+        __fieldsMap.get(scalaDescriptor.findFieldByNumber(10).get).flatMap(_.as[scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link]])
       )
     case _ => throw new RuntimeException("Expected PMessage")
   }
@@ -265,6 +261,8 @@ object Ebook extends scalapb.GeneratedMessageCompanion[com.github.sguzman.ebook.
     (__number: @_root_.scala.unchecked) match {
       case 6 => __out = com.github.sguzman.ebook.graph.protoc.items.Details
       case 8 => __out = com.github.sguzman.ebook.graph.protoc.items.Link
+      case 9 => __out = com.github.sguzman.ebook.graph.protoc.items.Link
+      case 10 => __out = com.github.sguzman.ebook.graph.protoc.items.Link
     }
     __out
   }
@@ -282,8 +280,10 @@ object Ebook extends scalapb.GeneratedMessageCompanion[com.github.sguzman.ebook.
     def optionalDetail: _root_.scalapb.lenses.Lens[UpperPB, scala.Option[com.github.sguzman.ebook.graph.protoc.items.Details]] = field(_.detail)((c_, f_) => c_.copy(detail = f_))
     def categories: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.collection.Seq[_root_.scala.Predef.String]] = field(_.categories)((c_, f_) => c_.copy(categories = f_))
     def links: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.collection.Seq[com.github.sguzman.ebook.graph.protoc.items.Link]] = field(_.links)((c_, f_) => c_.copy(links = f_))
-    def prev: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.prev)((c_, f_) => c_.copy(prev = f_))
-    def next: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.next)((c_, f_) => c_.copy(next = f_))
+    def prev: _root_.scalapb.lenses.Lens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.Link] = field(_.getPrev)((c_, f_) => c_.copy(prev = Option(f_)))
+    def optionalPrev: _root_.scalapb.lenses.Lens[UpperPB, scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link]] = field(_.prev)((c_, f_) => c_.copy(prev = f_))
+    def next: _root_.scalapb.lenses.Lens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.Link] = field(_.getNext)((c_, f_) => c_.copy(next = Option(f_)))
+    def optionalNext: _root_.scalapb.lenses.Lens[UpperPB, scala.Option[com.github.sguzman.ebook.graph.protoc.items.Link]] = field(_.next)((c_, f_) => c_.copy(next = f_))
   }
   final val TITLE_FIELD_NUMBER = 1
   final val DATE_FIELD_NUMBER = 2
