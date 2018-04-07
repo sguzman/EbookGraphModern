@@ -1,16 +1,23 @@
 package com.github.sguzman.ebook.graph
 
+import java.io.{File, FileInputStream, FileOutputStream}
+
+import com.github.sguzman.ebook.graph.protoc.items.ItemStore
+import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
+import net.ruippeixotog.scalascraper.model.Element
+import org.apache.commons.lang3.StringUtils
+
 object Main {
-  var itemCache: Items = identity {
+  var itemCache: ItemStore = identity {
     val file = new File("./items.msg")
     if (!file.exists) {
       scribe.info("Creating items.msg file")
       file.createNewFile()
-      Items(Seq(), Map(), Map())
+      ItemStore(Seq())
     } else {
       scribe.info("Found items.msg file")
       val input = new FileInputStream(file)
-      val out = Items.parseFrom(input)
+      val out = ItemStore.parseFrom(input)
       input.close()
       out
     }
@@ -58,14 +65,14 @@ object Main {
       scribe.info(s"Hit cache for key $url -> $value")
       value
     }
-    else if (HUtil.httpCache.contains(url)) {
-      val html = HUtil.retryHttpGet(url)
+    else if (HttpUtil.httpCache.contains(url)) {
+      val html = HttpUtil.retryHttpGet(url)
       val result = f(html.doc)
       scribe.info(s"Got key $url -> $result")
       cache.put(url, result)
       result
     } else {
-      val html = HUtil.retryHttpGet(url)
+      val html = HttpUtil.retryHttpGet(url)
       val result = f(html.doc)
       scribe.info(s"After HTTP request, got key $url -> $result")
       cache.put(url, result)
