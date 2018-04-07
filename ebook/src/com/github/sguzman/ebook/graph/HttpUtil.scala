@@ -56,4 +56,8 @@ object HttpUtil {
 
     scribe.info("Wrote http.msg")
   }
+
+  Runtime.getRuntime.addShutdownHook(new Thread({() =>
+    writeHttpCache()
+  }))
 }
