@@ -3,6 +3,7 @@ package com.github.sguzman.ebook.graph
 import java.io.{File, FileInputStream, FileOutputStream}
 
 import com.github.sguzman.ebook.graph.protoc.items._
+import com.google.protobuf.ByteString
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.model.Element
@@ -143,7 +144,7 @@ object Main {
             title,
             date,
             img,
-            desc,
+            ByteString.copyFrom(Brotli.compress(desc)),
             id.toInt,
             Some(Details(
               author,
