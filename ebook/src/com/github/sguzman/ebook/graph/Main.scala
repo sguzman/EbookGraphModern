@@ -2,13 +2,11 @@ package com.github.sguzman.ebook.graph
 
 import java.io.{File, FileInputStream, FileOutputStream}
 
-import com.github.sguzman.ebook.graph.protoc.items.ItemStore
-import com.github.sguzman.ebook.graph.protoc.items.Link
+import com.github.sguzman.ebook.graph.protoc.items.{ItemStore, Link}
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
-import net.ruippeixotog.scalascraper.model.Element
 import net.ruippeixotog.scalascraper.dsl.DSL._
-import net.ruippeixotog.scalascraper.scraper.ContentExtractors.element
-import net.ruippeixotog.scalascraper.scraper.ContentExtractors.elementList
+import net.ruippeixotog.scalascraper.model.Element
+import net.ruippeixotog.scalascraper.scraper.ContentExtractors.{element, elementList}
 import org.apache.commons.lang3.StringUtils
 
 object Main {
@@ -101,14 +99,19 @@ object Main {
   def main(args: Array[String]): Unit = {
     locally {
       val pages = 1 to 1248
-      pages.par.foreach{a =>
+      val links = pages.par.flatMap{a =>
         val url = s"https://it-eb.com/page/$a/"
         val doc = HttpUtil.retryHttpGet(url).doc
 
-        doc.flatMap("article.post > div.post-inner > div.post-content > div.post-header > h2.post-title > a[href]").map(_.text).foreach{b =>
-          itemCache = itemCache.addLinks(Link(b))
-        }
-      }
+        val links = doc.flatMap("article.post > div.post-inner > div.post-content > div.post-header > h2.post-title > a[href]")
+          .map(_.attr("href"))
+          .map(b => Link(b))
+
+        links.foreach(b => scribe.info(b.link))
+        links
+      }.toList
+
+      itemCache = itemCache.addAllLinks(links)
     }
   }
 }
