@@ -143,6 +143,7 @@ object Main {
           val next = doc.map("li.next > a[href]").attr("href")
 
           Ebook(
+            title,
             date,
             img,
             desc,
