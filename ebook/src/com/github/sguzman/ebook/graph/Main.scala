@@ -3,6 +3,7 @@ package com.github.sguzman.ebook.graph
 import java.io.{File, FileInputStream, FileOutputStream}
 
 import com.github.sguzman.ebook.graph.protoc.items.ItemStore
+import com.github.sguzman.ebook.graph.protoc.items.Link
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
 import net.ruippeixotog.scalascraper.model.Element
 import net.ruippeixotog.scalascraper.dsl.DSL._
@@ -98,6 +99,16 @@ object Main {
     }) (f)
 
   def main(args: Array[String]): Unit = {
-    println("Hello")
+    locally {
+      val pages = 1 to 1248
+      pages.par.foreach{a =>
+        val url = s"https://it-eb.com/page/$a/"
+        val doc = HttpUtil.retryHttpGet(url).doc
+
+        doc.flatMap("article.post > div.post-inner > div.post-content > div.post-header > h2.post-title > a[href]").map(_.text).foreach{b =>
+          itemCache = itemCache.addLinks(Link(b))
+        }
+      }
+    }
   }
 }
