@@ -94,7 +94,7 @@ object Main {
     get[Cacheable[A], A](s, new Cacheable[A] {
       override def contains(s: String): Boolean = cont(s)
       override def apply(s: String): A = appl(s)
-      override def put(a: String, b: A): A = put(a, b)
+      override def put(a: String, b: A): Unit = put(a, b)
     }) (f)
 
   def main(args: Array[String]): Unit = {
