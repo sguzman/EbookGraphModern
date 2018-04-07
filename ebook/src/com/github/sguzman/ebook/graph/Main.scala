@@ -123,7 +123,7 @@ object Main {
           val detailVals = doc.flatMap("div.book-details > ul > li").map(_.text)
           val detailMap = details.zip(detailVals).map(b => (b._1.trim.stripSuffix(":").toLowerCase, b._2.stripPrefix(b._1))).toMap
 
-          val publisher = detailMap("publishers")
+          val publisher = detailMap("publisher")
           val author = detailMap("authors")
           val pubDate = detailMap("publication date")
           val isbn10 = detailMap("isbn-10")
