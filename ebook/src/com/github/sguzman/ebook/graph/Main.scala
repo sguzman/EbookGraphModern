@@ -190,48 +190,55 @@ object Main {
       val cache = itemCache.rapidHost
       itemCache.host.par.map(_._2.link).foreach{a =>
         extract(a)(cache.contains)(cache.apply)((a, b) => itemCache = itemCache.addRapidHost((a, b))) {doc =>
-          val topTitle = doc.map("h1").text
-          val key = doc.flatMap("div.col-md-6.file-info > ul > li > span").map(_.text)
-          val values = doc.flatMap("div.col-md-6.file-info > ul > li").map(_.text)
-          val keyVals = key.zip(values).map(a => a._1.toLowerCase -> a._2.stripPrefix(a._1).stripPrefix(": ")).toMap
+          val maybeTitle = doc.maybe("h1")
 
-          val encryption = keyVals.getOrElse("encryption", "no").toLowerCase match {
-            case "yes" => true
-            case "no" => false
-          }
+          maybeTitle match {
+            case None => Hosting()
+            case Some(topTitle) => identity {
+              val key = doc.flatMap("div.col-md-6.file-info > ul > li > span").map(_.text)
+              val values = doc.flatMap("div.col-md-6.file-info > ul > li").map(_.text)
+              val keyVals = key.zip(values).map(a => a._1.toLowerCase -> a._2.stripPrefix(a._1).stripPrefix(": ")).toMap
 
-          val pageSize = identity {
-            val split = keyVals.getOrElse("page size", "-1 x -1 px")
-              .stripSuffix(" (letter)")
-              .stripSuffix(" (A4)")
-              .split(" ")
+              val encryption = keyVals.getOrElse("encryption", "no").toLowerCase match {
+                case "yes" => true
+                case "no" => false
+              }
 
-            val height = split.head.toFloat
-            val width = split(2).toFloat
-            val units = split.last.toLowerCase match {
-              case "pts" => Units.PTS
-              case "px" | "pixels" => Units.PX
-              case "inch" | "inches" => Units.INCH
+              val pageSize = identity {
+                val split = keyVals.getOrElse("page size", "-1 x -1 px")
+                  .stripSuffix(" (letter)")
+                  .stripSuffix(" (A4)")
+                  .split(" ")
+
+                val height = split.head.toFloat
+                val width = split(2).toFloat
+                val units = split.last.toLowerCase match {
+                  case "pts" => Units.PTS
+                  case "px" | "pixels" => Units.PX
+                  case "inch" | "inches" => Units.INCH
+                }
+
+                PageDimension(height, width, units)
+              }
+
+              Hosting(
+                topTitle.text,
+                keyVals.getOrElse("file type", ""),
+                keyVals.getOrElse("title", ""),
+                keyVals.getOrElse("author", ""),
+                keyVals.getOrElse("creator", ""),
+                keyVals.getOrElse("producer", ""),
+                keyVals.getOrElse("creation date", ""),
+                keyVals.getOrElse("modification date", ""),
+                keyVals.getOrElse("pages", "-1").toInt,
+                encryption,
+                Some(pageSize),
+                keyVals.getOrElse("file size", "-1").stripSuffix(" bytes").toInt,
+                keyVals.getOrElse("md5 checksum", "")
+              )
             }
-
-            PageDimension(height, width, units)
           }
 
-          Hosting(
-            topTitle,
-            keyVals.getOrElse("file type", ""),
-            keyVals.getOrElse("title", ""),
-            keyVals.getOrElse("author", ""),
-            keyVals.getOrElse("creator", ""),
-            keyVals.getOrElse("producer", ""),
-            keyVals.getOrElse("creation date", ""),
-            keyVals.getOrElse("modification date", ""),
-            keyVals.getOrElse("pages", "-1").toInt,
-            encryption,
-            Some(pageSize),
-            keyVals.getOrElse("file size", "-1").stripSuffix(" bytes").toInt,
-            keyVals.getOrElse("md5 checksum", "")
-          )
 
         }
       }
