@@ -28,15 +28,16 @@ message Details {
 }
 
 message Ebook {
-    string date = 1;
-    string img = 2;
-    string desc = 3;
-    uint32 id = 4;
-    Details detail = 5;
-    repeated string categories = 6;
-    repeated Link links = 7;
-    string prev = 8;
-    string next = 9;
+    string title = 1;
+    string date = 2;
+    string img = 3;
+    string desc = 4;
+    uint32 id = 5;
+    Details detail = 6;
+    repeated string categories = 7;
+    repeated Link links = 8;
+    string prev = 9;
+    string next = 10;
 }
 
 message ItemStore {
