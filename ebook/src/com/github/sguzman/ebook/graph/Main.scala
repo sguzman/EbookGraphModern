@@ -259,7 +259,7 @@ object Main {
 
     locally {
       val store = itemCache.links.par.map{a =>
-        val book = itemCache.books(a)
+        val book = itemCache.books(a.link)
         val url = s"https://it-eb.com/download.php?id=${book.id}"
         val host = itemCache.host(url)
         val hosting = itemCache.rapidHost(host.link)
