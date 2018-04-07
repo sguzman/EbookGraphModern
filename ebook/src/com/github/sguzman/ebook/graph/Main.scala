@@ -193,11 +193,12 @@ object Main {
           val topTitle = doc.map("div.col-md-6.file-info > h1").text
           val key = doc.flatMap("div.col-md-6.file-info > ul > li > span").map(_.text)
           val values = doc.flatMap("div.col-md-6.file-info > ul > li").map(_.text)
-          val keyVals = key.zip(values).map(a => a._1.toLowerCase -> a._2.stripPrefix(": ")).toMap
+          val keyVals = key.zip(values).map(a => a._1.toLowerCase -> a._2.stripPrefix(a._1).stripPrefix(": ")).toMap
 
           val encryption = keyVals("encryption").toLowerCase match {
             case "yes" => true
             case "no" => false
+            case _: String => throw new Exception(keyVals("encryption"))
           }
 
           val fileSize = identity {
