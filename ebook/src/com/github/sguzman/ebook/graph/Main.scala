@@ -151,7 +151,7 @@ object Main {
               isbn10,
               isbn13,
               publisher,
-              pages.toInt,
+              if (pages.nonEmpty) pages.toInt else -1,
               format,
               Some(Size(size.toFloat, sizeType))
             )),
