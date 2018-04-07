@@ -120,12 +120,12 @@ object Main {
           val detailVals = doc.flatMap("div.book-details > ul > li").map(_.text)
           val detailMap = details.zip(detailVals).map(b => (b._1.trim.stripSuffix(":").toLowerCase, b._2.stripPrefix(b._1))).toMap
 
-          val publisher = detailMap("publisher")
+          val publisher = detailMap.getOrElse("publisher", "")
           val author = detailMap.getOrElse("authors", "")
           val pubDate = detailMap("publication date")
           val isbn10 = detailMap.getOrElse("isbn-10", "")
           val isbn13 = detailMap.getOrElse("isbn-13", "")
-          val pages = detailMap("pages").stripSuffix(" pages")
+          val pages = detailMap.getOrElse("pages", "").stripSuffix(" pages")
           val format = detailMap("format")
           val size = detailMap("size").init.init.toString
           val sizeType = detailMap("size").stripPrefix(size) match {
