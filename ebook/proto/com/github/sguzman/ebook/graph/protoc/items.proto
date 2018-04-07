@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package com.github.sguzman.ebook.graph.protoc;
+
+message Link {
+    string link = 1;
+}
+
+message Size {
+    uint32 size = 1;
+    enum Types {
+        Kb = 0;
+        Mb = 1;
+        Gb = 2;
+    }
+    Types type = 2;
+}
+
+message Details {
+    string authors = 1;
+    string pubDate = 2;
+    string isbn10 = 3;
+    string isbn13 = 4;
+    string publisher = 5;
+    uint32 pages = 6;
+    string format = 7;
+    Size size = 8;
+}
+
+message Ebook {
+    string date = 1;
+    string img = 2;
+    string desc = 3;
+    uint32 id = 4;
+    Details detail = 5;
+    repeated string categories = 6;
+    repeated Link links = 7;
+    string prev = 8;
+    string next = 9;
+}
+
+message ItemStore {
+    repeated Link links = 1;
+}
