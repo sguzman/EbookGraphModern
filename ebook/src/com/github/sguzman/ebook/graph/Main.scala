@@ -123,8 +123,8 @@ object Main {
           val publisher = detailMap("publisher")
           val author = detailMap.getOrElse("authors", "")
           val pubDate = detailMap("publication date")
-          val isbn10 = detailMap("isbn-10")
-          val isbn13 = detailMap("isbn-13")
+          val isbn10 = detailMap.getOrElse("isbn-10", "")
+          val isbn13 = detailMap.getOrElse("isbn-13", "")
           val pages = detailMap("pages").stripSuffix(" pages")
           val format = detailMap("format")
           val size = detailMap("size").init.init.toString
