@@ -36,8 +36,8 @@ message Ebook {
     Details detail = 6;
     repeated string categories = 7;
     repeated Link links = 8;
-    string prev = 9;
-    string next = 10;
+    Link prev = 9;
+    Link next = 10;
 }
 
 message ItemStore {
