@@ -225,7 +225,7 @@ object Main {
             keyVals.getOrElse("pages", "-1").toInt,
             encryption,
             Some(pageSize),
-            keyVals.getOrElse("page size", "-1").stripSuffix(" bytes").toInt,
+            keyVals.getOrElse("file size", "-1").stripSuffix(" bytes").toInt,
             keyVals.getOrElse("md5 checksum", "")
           )
 
