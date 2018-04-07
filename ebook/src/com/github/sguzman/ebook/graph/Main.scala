@@ -2,7 +2,6 @@ package com.github.sguzman.ebook.graph
 
 import java.io.{File, FileInputStream, FileOutputStream}
 
-import com.github.sguzman.ebook.graph.Main.itemCache
 import com.github.sguzman.ebook.graph.protoc.items._
 import com.google.protobuf.ByteString
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
@@ -116,7 +115,7 @@ object Main {
     locally {
       val cache = itemCache.books
       itemCache.links.par.foreach{a =>
-        val book = extract(a.link)(cache.contains)(cache.apply)((a, b) => itemCache = itemCache.addBooks((a, b))) {doc =>
+        extract(a.link)(cache.contains)(cache.apply)((a, b) => itemCache = itemCache.addBooks((a, b))) {doc =>
           val title = doc.map("h1.post-title").text
           val date = (doc.maybe("time.post-date") match {
             case None => doc.map("span.post-date")
@@ -169,11 +168,20 @@ object Main {
             )),
             categories,
             relatedPosts.map(b => Link(b)),
-            prev,
-            next
+            Some(Link(prev)),
+            Some(Link(next))
           )
         }
-        itemCache = itemCache.addBooks((a.link, book))
+      }
+    }
+
+    locally {
+      val cache = itemCache.host
+      itemCache.books.par.map(_._2.id).foreach { a =>
+        val url = s"https://it-eb.com/download.php?id=$a"
+        extract(url)(cache.contains)(cache.apply)((a, b) => itemCache = itemCache.addHost((a, b))) { doc =>
+          Link(doc.root.text)
+        }
       }
     }
 
