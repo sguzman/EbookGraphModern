@@ -134,7 +134,7 @@ object Main {
           val pages = detailMap.getOrElse("pages", "").stripSuffix(" pages")
           val format = detailMap("format")
           val size = detailMap.getOrElse("size", "-1__").init.init.toString
-          val sizeType = detailMap("size").stripPrefix(size) match {
+          val sizeType = detailMap.getOrElse("size", "kb").stripPrefix(size) match {
             case "Kb" | "kb" => Size.Types.Kb
             case "Mb" | "mb" => Size.Types.Mb
             case "Gb" | "gb" => Size.Types.Gb
