@@ -195,14 +195,13 @@ object Main {
           val values = doc.flatMap("div.col-md-6.file-info > ul > li").map(_.text)
           val keyVals = key.zip(values).map(a => a._1.toLowerCase -> a._2.stripPrefix(a._1).stripPrefix(": ")).toMap
 
-          val encryption = keyVals("encryption").toLowerCase match {
+          val encryption = keyVals.getOrElse("encryption", "no").toLowerCase match {
             case "yes" => true
             case "no" => false
-            case _: String => throw new Exception(keyVals("encryption"))
           }
 
           val pageSize = identity {
-            val split = keyVals("file size").split(" ")
+            val split = keyVals.getOrElse("page size", "-1 x -1 px").split(" ")
             val height = split.head.toFloat
             val width = split(2).toFloat
             val units = split.last.toLowerCase match {
@@ -216,18 +215,18 @@ object Main {
 
           Hosting(
             topTitle,
-            keyVals("file type"),
-            keyVals("title"),
-            keyVals("author"),
-            keyVals("creator"),
-            keyVals("producer"),
-            keyVals("creation date"),
-            keyVals("modification date"),
-            keyVals("pages").toInt,
+            keyVals.getOrElse("file type", ""),
+            keyVals.getOrElse("title", ""),
+            keyVals.getOrElse("author", ""),
+            keyVals.getOrElse("creator", ""),
+            keyVals.getOrElse("producer", ""),
+            keyVals.getOrElse("creation date", ""),
+            keyVals.getOrElse("modification date", ""),
+            keyVals.getOrElse("pages", "-1").toInt,
             encryption,
             Some(pageSize),
-            keyVals("page size").stripSuffix(" bytes").toInt,
-            keyVals("md5 checksum")
+            keyVals.getOrElse("page size", "-1").stripSuffix(" bytes").toInt,
+            keyVals.getOrElse("md5 checksum", "")
           )
 
         }
