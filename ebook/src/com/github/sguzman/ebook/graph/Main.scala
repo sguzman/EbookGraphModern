@@ -98,12 +98,9 @@ object Main {
         val url = s"https://it-eb.com/page/$a/"
         val doc = HttpUtil.retryHttpGet(url).doc
 
-        val links = doc.flatMap("article.post > div.post-inner > div.post-content > div.post-header > h2.post-title > a[href]")
+        doc.flatMap("article.post > div.post-inner > div.post-content > div.post-header > h2.post-title > a[href]")
           .map(_.attr("href"))
           .map(b => Link(b))
-
-        links.foreach(b => scribe.info(b.link))
-        links
       }.toList
 
       itemCache = itemCache.addAllLinks(links)
@@ -124,7 +121,7 @@ object Main {
           val detailMap = details.zip(detailVals).map(b => (b._1.trim.stripSuffix(":").toLowerCase, b._2.stripPrefix(b._1))).toMap
 
           val publisher = detailMap("publisher")
-          val author = detailMap("authors")
+          val author = detailMap.getOrElse("authors", "")
           val pubDate = detailMap("publication date")
           val isbn10 = detailMap("isbn-10")
           val isbn13 = detailMap("isbn-13")
@@ -132,9 +129,9 @@ object Main {
           val format = detailMap("format")
           val size = detailMap("size").init.init.toString
           val sizeType = detailMap("size").stripPrefix(size) match {
-            case "K" | "K" => Size.Types.Kb
-            case "M" | "m" => Size.Types.Mb
-            case "G" | "g" => Size.Types.Gb
+            case "Kb" | "kb" => Size.Types.Kb
+            case "Mb" | "mb" => Size.Types.Mb
+            case "Gb" | "gb" => Size.Types.Gb
           }
 
           val relatedPosts = doc.flatMap("li.related-article > article.post > figure.post-thumbnail > a[href]").map(_.attr("href"))

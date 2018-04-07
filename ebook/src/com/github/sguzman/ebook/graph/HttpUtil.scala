@@ -3,7 +3,6 @@ package com.github.sguzman.ebook.graph
 import java.io.{File, FileInputStream, FileOutputStream}
 import java.net.SocketTimeoutException
 
-import com.github.sguzman.brotli.Brotli
 import com.github.sguzman.ebook.graph.protoc.http
 import com.google.protobuf.ByteString
 import scalaj.http.Http
