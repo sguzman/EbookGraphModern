@@ -177,10 +177,19 @@ object Main {
 
     locally {
       val cache = itemCache.host
-      itemCache.books.par.map(_._2.id).foreach { a =>
+      itemCache.books.par.map(_._2.id).foreach{a =>
         val url = s"https://it-eb.com/download.php?id=$a"
-        extract(url)(cache.contains)(cache.apply)((a, b) => itemCache = itemCache.addHost((a, b))) { doc =>
+        extract(url)(cache.contains)(cache.apply)((a, b) => itemCache = itemCache.addHost((a, b))) {doc =>
           Link(doc.root.text)
+        }
+      }
+    }
+
+    locally {
+      val cache = itemCache.rapidHost
+      itemCache.host.par.map(_._2.link).foreach{a =>
+        extract(a)(cache.contains)(cache.apply)((a, b) => itemCache = itemCache.addRapidHost((a, b))) {doc =>
+
         }
       }
     }

@@ -7,6 +7,7 @@ package com.github.sguzman.ebook.graph.protoc.items
 
 @SerialVersionUID(0L)
 final case class Hosting(
+    topTitle: _root_.scala.Predef.String = "",
     fileType: _root_.scala.Predef.String = "",
     title: _root_.scala.Predef.String = "",
     author: _root_.scala.Predef.String = "",
@@ -24,18 +25,19 @@ final case class Hosting(
     private[this] var __serializedSizeCachedValue: _root_.scala.Int = 0
     private[this] def __computeSerializedValue(): _root_.scala.Int = {
       var __size = 0
-      if (fileType != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(1, fileType) }
-      if (title != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(2, title) }
-      if (author != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(3, author) }
-      if (creator != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(4, creator) }
-      if (producer != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(5, producer) }
-      if (creationDate != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(6, creationDate) }
-      if (modDate != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(7, modDate) }
-      if (pages != 0) { __size += _root_.com.google.protobuf.CodedOutputStream.computeUInt32Size(8, pages) }
-      if (encrypted != false) { __size += _root_.com.google.protobuf.CodedOutputStream.computeBoolSize(9, encrypted) }
+      if (topTitle != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(1, topTitle) }
+      if (fileType != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(2, fileType) }
+      if (title != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(3, title) }
+      if (author != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(4, author) }
+      if (creator != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(5, creator) }
+      if (producer != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(6, producer) }
+      if (creationDate != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(7, creationDate) }
+      if (modDate != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(8, modDate) }
+      if (pages != 0) { __size += _root_.com.google.protobuf.CodedOutputStream.computeUInt32Size(9, pages) }
+      if (encrypted != false) { __size += _root_.com.google.protobuf.CodedOutputStream.computeBoolSize(10, encrypted) }
       if (dim.isDefined) { __size += 1 + _root_.com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(dim.get.serializedSize) + dim.get.serializedSize }
-      if (size != 0) { __size += _root_.com.google.protobuf.CodedOutputStream.computeUInt32Size(11, size) }
-      if (md5 != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(12, md5) }
+      if (size != 0) { __size += _root_.com.google.protobuf.CodedOutputStream.computeUInt32Size(12, size) }
+      if (md5 != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(13, md5) }
       __size
     }
     final override def serializedSize: _root_.scala.Int = {
@@ -48,78 +50,85 @@ final case class Hosting(
     }
     def writeTo(`_output__`: _root_.com.google.protobuf.CodedOutputStream): Unit = {
       {
-        val __v = fileType
+        val __v = topTitle
         if (__v != "") {
           _output__.writeString(1, __v)
         }
       };
       {
-        val __v = title
+        val __v = fileType
         if (__v != "") {
           _output__.writeString(2, __v)
         }
       };
       {
-        val __v = author
+        val __v = title
         if (__v != "") {
           _output__.writeString(3, __v)
         }
       };
       {
-        val __v = creator
+        val __v = author
         if (__v != "") {
           _output__.writeString(4, __v)
         }
       };
       {
-        val __v = producer
+        val __v = creator
         if (__v != "") {
           _output__.writeString(5, __v)
         }
       };
       {
-        val __v = creationDate
+        val __v = producer
         if (__v != "") {
           _output__.writeString(6, __v)
         }
       };
       {
-        val __v = modDate
+        val __v = creationDate
         if (__v != "") {
           _output__.writeString(7, __v)
         }
       };
       {
+        val __v = modDate
+        if (__v != "") {
+          _output__.writeString(8, __v)
+        }
+      };
+      {
         val __v = pages
         if (__v != 0) {
-          _output__.writeUInt32(8, __v)
+          _output__.writeUInt32(9, __v)
         }
       };
       {
         val __v = encrypted
         if (__v != false) {
-          _output__.writeBool(9, __v)
+          _output__.writeBool(10, __v)
         }
       };
       dim.foreach { __v =>
-        _output__.writeTag(10, 2)
+        _output__.writeTag(11, 2)
         _output__.writeUInt32NoTag(__v.serializedSize)
         __v.writeTo(_output__)
       };
       {
         val __v = size
         if (__v != 0) {
-          _output__.writeUInt32(11, __v)
+          _output__.writeUInt32(12, __v)
         }
       };
       {
         val __v = md5
         if (__v != "") {
-          _output__.writeString(12, __v)
+          _output__.writeString(13, __v)
         }
       };
     }
     def mergeFrom(`_input__`: _root_.com.google.protobuf.CodedInputStream): com.github.sguzman.ebook.graph.protoc.items.Hosting = {
+      var __topTitle = this.topTitle
       var __fileType = this.fileType
       var __title = this.title
       var __author = this.author
@@ -138,33 +147,36 @@ final case class Hosting(
         _tag__ match {
           case 0 => _done__ = true
           case 10 =>
-            __fileType = _input__.readString()
+            __topTitle = _input__.readString()
           case 18 =>
-            __title = _input__.readString()
+            __fileType = _input__.readString()
           case 26 =>
-            __author = _input__.readString()
+            __title = _input__.readString()
           case 34 =>
-            __creator = _input__.readString()
+            __author = _input__.readString()
           case 42 =>
-            __producer = _input__.readString()
+            __creator = _input__.readString()
           case 50 =>
-            __creationDate = _input__.readString()
+            __producer = _input__.readString()
           case 58 =>
+            __creationDate = _input__.readString()
+          case 66 =>
             __modDate = _input__.readString()
-          case 64 =>
-            __pages = _input__.readUInt32()
           case 72 =>
+            __pages = _input__.readUInt32()
+          case 80 =>
             __encrypted = _input__.readBool()
-          case 82 =>
+          case 90 =>
             __dim = Option(_root_.scalapb.LiteParser.readMessage(_input__, __dim.getOrElse(com.github.sguzman.ebook.graph.protoc.items.PageDimension.defaultInstance)))
-          case 88 =>
+          case 96 =>
             __size = _input__.readUInt32()
-          case 98 =>
+          case 106 =>
             __md5 = _input__.readString()
           case tag => _input__.skipField(tag)
         }
       }
       com.github.sguzman.ebook.graph.protoc.items.Hosting(
+          topTitle = __topTitle,
           fileType = __fileType,
           title = __title,
           author = __author,
@@ -179,6 +191,7 @@ final case class Hosting(
           md5 = __md5
       )
     }
+    def withTopTitle(__v: _root_.scala.Predef.String): Hosting = copy(topTitle = __v)
     def withFileType(__v: _root_.scala.Predef.String): Hosting = copy(fileType = __v)
     def withTitle(__v: _root_.scala.Predef.String): Hosting = copy(title = __v)
     def withAuthor(__v: _root_.scala.Predef.String): Hosting = copy(author = __v)
@@ -196,47 +209,51 @@ final case class Hosting(
     def getFieldByNumber(__fieldNumber: _root_.scala.Int): scala.Any = {
       (__fieldNumber: @_root_.scala.unchecked) match {
         case 1 => {
-          val __t = fileType
+          val __t = topTitle
           if (__t != "") __t else null
         }
         case 2 => {
-          val __t = title
+          val __t = fileType
           if (__t != "") __t else null
         }
         case 3 => {
-          val __t = author
+          val __t = title
           if (__t != "") __t else null
         }
         case 4 => {
-          val __t = creator
+          val __t = author
           if (__t != "") __t else null
         }
         case 5 => {
-          val __t = producer
+          val __t = creator
           if (__t != "") __t else null
         }
         case 6 => {
-          val __t = creationDate
+          val __t = producer
           if (__t != "") __t else null
         }
         case 7 => {
-          val __t = modDate
+          val __t = creationDate
           if (__t != "") __t else null
         }
         case 8 => {
+          val __t = modDate
+          if (__t != "") __t else null
+        }
+        case 9 => {
           val __t = pages
           if (__t != 0) __t else null
         }
-        case 9 => {
+        case 10 => {
           val __t = encrypted
           if (__t != false) __t else null
         }
-        case 10 => dim.orNull
-        case 11 => {
+        case 11 => dim.orNull
+        case 12 => {
           val __t = size
           if (__t != 0) __t else null
         }
-        case 12 => {
+        case 13 => {
           val __t = md5
           if (__t != "") __t else null
         }
@@ -245,18 +262,19 @@ final case class Hosting(
     def getField(__field: _root_.scalapb.descriptors.FieldDescriptor): _root_.scalapb.descriptors.PValue = {
       require(__field.containingMessage eq companion.scalaDescriptor)
       (__field.number: @_root_.scala.unchecked) match {
-        case 1 => _root_.scalapb.descriptors.PString(fileType)
-        case 2 => _root_.scalapb.descriptors.PString(title)
-        case 3 => _root_.scalapb.descriptors.PString(author)
-        case 4 => _root_.scalapb.descriptors.PString(creator)
-        case 5 => _root_.scalapb.descriptors.PString(producer)
-        case 6 => _root_.scalapb.descriptors.PString(creationDate)
-        case 7 => _root_.scalapb.descriptors.PString(modDate)
-        case 8 => _root_.scalapb.descriptors.PInt(pages)
-        case 9 => _root_.scalapb.descriptors.PBoolean(encrypted)
-        case 10 => dim.map(_.toPMessage).getOrElse(_root_.scalapb.descriptors.PEmpty)
-        case 11 => _root_.scalapb.descriptors.PInt(size)
-        case 12 => _root_.scalapb.descriptors.PString(md5)
+        case 1 => _root_.scalapb.descriptors.PString(topTitle)
+        case 2 => _root_.scalapb.descriptors.PString(fileType)
+        case 3 => _root_.scalapb.descriptors.PString(title)
+        case 4 => _root_.scalapb.descriptors.PString(author)
+        case 5 => _root_.scalapb.descriptors.PString(creator)
+        case 6 => _root_.scalapb.descriptors.PString(producer)
+        case 7 => _root_.scalapb.descriptors.PString(creationDate)
+        case 8 => _root_.scalapb.descriptors.PString(modDate)
+        case 9 => _root_.scalapb.descriptors.PInt(pages)
+        case 10 => _root_.scalapb.descriptors.PBoolean(encrypted)
+        case 11 => dim.map(_.toPMessage).getOrElse(_root_.scalapb.descriptors.PEmpty)
+        case 12 => _root_.scalapb.descriptors.PInt(size)
+        case 13 => _root_.scalapb.descriptors.PString(md5)
       }
     }
     def toProtoString: _root_.scala.Predef.String = _root_.scalapb.TextFormat.printToUnicodeString(this)
@@ -276,11 +294,12 @@ object Hosting extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eboo
       __fieldsMap.getOrElse(__fields.get(4), "").asInstanceOf[_root_.scala.Predef.String],
       __fieldsMap.getOrElse(__fields.get(5), "").asInstanceOf[_root_.scala.Predef.String],
       __fieldsMap.getOrElse(__fields.get(6), "").asInstanceOf[_root_.scala.Predef.String],
-      __fieldsMap.getOrElse(__fields.get(7), 0).asInstanceOf[_root_.scala.Int],
-      __fieldsMap.getOrElse(__fields.get(8), false).asInstanceOf[_root_.scala.Boolean],
-      __fieldsMap.get(__fields.get(9)).asInstanceOf[scala.Option[com.github.sguzman.ebook.graph.protoc.items.PageDimension]],
-      __fieldsMap.getOrElse(__fields.get(10), 0).asInstanceOf[_root_.scala.Int],
-      __fieldsMap.getOrElse(__fields.get(11), "").asInstanceOf[_root_.scala.Predef.String]
+      __fieldsMap.getOrElse(__fields.get(7), "").asInstanceOf[_root_.scala.Predef.String],
+      __fieldsMap.getOrElse(__fields.get(8), 0).asInstanceOf[_root_.scala.Int],
+      __fieldsMap.getOrElse(__fields.get(9), false).asInstanceOf[_root_.scala.Boolean],
+      __fieldsMap.get(__fields.get(10)).asInstanceOf[scala.Option[com.github.sguzman.ebook.graph.protoc.items.PageDimension]],
+      __fieldsMap.getOrElse(__fields.get(11), 0).asInstanceOf[_root_.scala.Int],
+      __fieldsMap.getOrElse(__fields.get(12), "").asInstanceOf[_root_.scala.Predef.String]
     )
   }
   implicit def messageReads: _root_.scalapb.descriptors.Reads[com.github.sguzman.ebook.graph.protoc.items.Hosting] = _root_.scalapb.descriptors.Reads{
@@ -294,11 +313,12 @@ object Hosting extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eboo
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(5).get).map(_.as[_root_.scala.Predef.String]).getOrElse(""),
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(6).get).map(_.as[_root_.scala.Predef.String]).getOrElse(""),
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(7).get).map(_.as[_root_.scala.Predef.String]).getOrElse(""),
-        __fieldsMap.get(scalaDescriptor.findFieldByNumber(8).get).map(_.as[_root_.scala.Int]).getOrElse(0),
-        __fieldsMap.get(scalaDescriptor.findFieldByNumber(9).get).map(_.as[_root_.scala.Boolean]).getOrElse(false),
-        __fieldsMap.get(scalaDescriptor.findFieldByNumber(10).get).flatMap(_.as[scala.Option[com.github.sguzman.ebook.graph.protoc.items.PageDimension]]),
-        __fieldsMap.get(scalaDescriptor.findFieldByNumber(11).get).map(_.as[_root_.scala.Int]).getOrElse(0),
-        __fieldsMap.get(scalaDescriptor.findFieldByNumber(12).get).map(_.as[_root_.scala.Predef.String]).getOrElse("")
+        __fieldsMap.get(scalaDescriptor.findFieldByNumber(8).get).map(_.as[_root_.scala.Predef.String]).getOrElse(""),
+        __fieldsMap.get(scalaDescriptor.findFieldByNumber(9).get).map(_.as[_root_.scala.Int]).getOrElse(0),
+        __fieldsMap.get(scalaDescriptor.findFieldByNumber(10).get).map(_.as[_root_.scala.Boolean]).getOrElse(false),
+        __fieldsMap.get(scalaDescriptor.findFieldByNumber(11).get).flatMap(_.as[scala.Option[com.github.sguzman.ebook.graph.protoc.items.PageDimension]]),
+        __fieldsMap.get(scalaDescriptor.findFieldByNumber(12).get).map(_.as[_root_.scala.Int]).getOrElse(0),
+        __fieldsMap.get(scalaDescriptor.findFieldByNumber(13).get).map(_.as[_root_.scala.Predef.String]).getOrElse("")
       )
     case _ => throw new RuntimeException("Expected PMessage")
   }
@@ -307,7 +327,7 @@ object Hosting extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eboo
   def messageCompanionForFieldNumber(__number: _root_.scala.Int): _root_.scalapb.GeneratedMessageCompanion[_] = {
     var __out: _root_.scalapb.GeneratedMessageCompanion[_] = null
     (__number: @_root_.scala.unchecked) match {
-      case 10 => __out = com.github.sguzman.ebook.graph.protoc.items.PageDimension
+      case 11 => __out = com.github.sguzman.ebook.graph.protoc.items.PageDimension
     }
     __out
   }
@@ -316,6 +336,7 @@ object Hosting extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eboo
   lazy val defaultInstance = com.github.sguzman.ebook.graph.protoc.items.Hosting(
   )
   implicit class HostingLens[UpperPB](_l: _root_.scalapb.lenses.Lens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.Hosting]) extends _root_.scalapb.lenses.ObjectLens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.Hosting](_l) {
+    def topTitle: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.topTitle)((c_, f_) => c_.copy(topTitle = f_))
     def fileType: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.fileType)((c_, f_) => c_.copy(fileType = f_))
     def title: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.title)((c_, f_) => c_.copy(title = f_))
     def author: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.author)((c_, f_) => c_.copy(author = f_))
@@ -330,16 +351,17 @@ object Hosting extends scalapb.GeneratedMessageCompanion[com.github.sguzman.eboo
     def size: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Int] = field(_.size)((c_, f_) => c_.copy(size = f_))
     def md5: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.md5)((c_, f_) => c_.copy(md5 = f_))
   }
-  final val FILETYPE_FIELD_NUMBER = 1
-  final val TITLE_FIELD_NUMBER = 2
-  final val AUTHOR_FIELD_NUMBER = 3
-  final val CREATOR_FIELD_NUMBER = 4
-  final val PRODUCER_FIELD_NUMBER = 5
-  final val CREATIONDATE_FIELD_NUMBER = 6
-  final val MODDATE_FIELD_NUMBER = 7
-  final val PAGES_FIELD_NUMBER = 8
-  final val ENCRYPTED_FIELD_NUMBER = 9
-  final val DIM_FIELD_NUMBER = 10
-  final val SIZE_FIELD_NUMBER = 11
-  final val MD5_FIELD_NUMBER = 12
+  final val TOPTITLE_FIELD_NUMBER = 1
+  final val FILETYPE_FIELD_NUMBER = 2
+  final val TITLE_FIELD_NUMBER = 3
+  final val AUTHOR_FIELD_NUMBER = 4
+  final val CREATOR_FIELD_NUMBER = 5
+  final val PRODUCER_FIELD_NUMBER = 6
+  final val CREATIONDATE_FIELD_NUMBER = 7
+  final val MODDATE_FIELD_NUMBER = 8
+  final val PAGES_FIELD_NUMBER = 9
+  final val ENCRYPTED_FIELD_NUMBER = 10
+  final val DIM_FIELD_NUMBER = 11
+  final val SIZE_FIELD_NUMBER = 12
+  final val MD5_FIELD_NUMBER = 13
 }

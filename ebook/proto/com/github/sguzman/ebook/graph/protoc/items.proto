@@ -52,18 +52,19 @@ message PageDimension {
 }
 
 message Hosting {
-    string fileType = 1;
-    string title = 2;
-    string author = 3;
-    string creator = 4;
-    string producer = 5;
-    string creationDate = 6;
-    string modDate = 7;
-    uint32 pages = 8;
-    bool encrypted = 9;
-    PageDimension dim = 10;
-    uint32 size = 11;
-    string md5 = 12;
+    string topTitle = 1;
+    string fileType = 2;
+    string title = 3;
+    string author = 4;
+    string creator = 5;
+    string producer = 6;
+    string creationDate = 7;
+    string modDate = 8;
+    uint32 pages = 9;
+    bool encrypted = 10;
+    PageDimension dim = 11;
+    uint32 size = 12;
+    string md5 = 13;
 }
 
 message ItemStore {
