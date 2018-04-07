@@ -31,7 +31,7 @@ message Ebook {
     string title = 1;
     string date = 2;
     string img = 3;
-    string desc = 4;
+    bytes desc = 4;
     uint32 id = 5;
     Details detail = 6;
     repeated string categories = 7;

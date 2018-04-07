@@ -10,7 +10,7 @@ final case class Ebook(
     title: _root_.scala.Predef.String = "",
     date: _root_.scala.Predef.String = "",
     img: _root_.scala.Predef.String = "",
-    desc: _root_.scala.Predef.String = "",
+    desc: _root_.com.google.protobuf.ByteString = _root_.com.google.protobuf.ByteString.EMPTY,
     id: _root_.scala.Int = 0,
     detail: scala.Option[com.github.sguzman.ebook.graph.protoc.items.Details] = None,
     categories: _root_.scala.collection.Seq[_root_.scala.Predef.String] = _root_.scala.collection.Seq.empty,
@@ -25,7 +25,7 @@ final case class Ebook(
       if (title != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(1, title) }
       if (date != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(2, date) }
       if (img != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(3, img) }
-      if (desc != "") { __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(4, desc) }
+      if (desc != _root_.com.google.protobuf.ByteString.EMPTY) { __size += _root_.com.google.protobuf.CodedOutputStream.computeBytesSize(4, desc) }
       if (id != 0) { __size += _root_.com.google.protobuf.CodedOutputStream.computeUInt32Size(5, id) }
       if (detail.isDefined) { __size += 1 + _root_.com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(detail.get.serializedSize) + detail.get.serializedSize }
       categories.foreach(categories => __size += _root_.com.google.protobuf.CodedOutputStream.computeStringSize(7, categories))
@@ -63,8 +63,8 @@ final case class Ebook(
       };
       {
         val __v = desc
-        if (__v != "") {
-          _output__.writeString(4, __v)
+        if (__v != _root_.com.google.protobuf.ByteString.EMPTY) {
+          _output__.writeBytes(4, __v)
         }
       };
       {
@@ -122,7 +122,7 @@ final case class Ebook(
           case 26 =>
             __img = _input__.readString()
           case 34 =>
-            __desc = _input__.readString()
+            __desc = _input__.readBytes()
           case 40 =>
             __id = _input__.readUInt32()
           case 50 =>
@@ -154,7 +154,7 @@ final case class Ebook(
     def withTitle(__v: _root_.scala.Predef.String): Ebook = copy(title = __v)
     def withDate(__v: _root_.scala.Predef.String): Ebook = copy(date = __v)
     def withImg(__v: _root_.scala.Predef.String): Ebook = copy(img = __v)
-    def withDesc(__v: _root_.scala.Predef.String): Ebook = copy(desc = __v)
+    def withDesc(__v: _root_.com.google.protobuf.ByteString): Ebook = copy(desc = __v)
     def withId(__v: _root_.scala.Int): Ebook = copy(id = __v)
     def getDetail: com.github.sguzman.ebook.graph.protoc.items.Details = detail.getOrElse(com.github.sguzman.ebook.graph.protoc.items.Details.defaultInstance)
     def clearDetail: Ebook = copy(detail = None)
@@ -185,7 +185,7 @@ final case class Ebook(
         }
         case 4 => {
           val __t = desc
-          if (__t != "") __t else null
+          if (__t != _root_.com.google.protobuf.ByteString.EMPTY) __t else null
         }
         case 5 => {
           val __t = id
@@ -210,7 +210,7 @@ final case class Ebook(
         case 1 => _root_.scalapb.descriptors.PString(title)
         case 2 => _root_.scalapb.descriptors.PString(date)
         case 3 => _root_.scalapb.descriptors.PString(img)
-        case 4 => _root_.scalapb.descriptors.PString(desc)
+        case 4 => _root_.scalapb.descriptors.PByteString(desc)
         case 5 => _root_.scalapb.descriptors.PInt(id)
         case 6 => detail.map(_.toPMessage).getOrElse(_root_.scalapb.descriptors.PEmpty)
         case 7 => _root_.scalapb.descriptors.PRepeated(categories.map(_root_.scalapb.descriptors.PString)(_root_.scala.collection.breakOut))
@@ -232,7 +232,7 @@ object Ebook extends scalapb.GeneratedMessageCompanion[com.github.sguzman.ebook.
       __fieldsMap.getOrElse(__fields.get(0), "").asInstanceOf[_root_.scala.Predef.String],
       __fieldsMap.getOrElse(__fields.get(1), "").asInstanceOf[_root_.scala.Predef.String],
       __fieldsMap.getOrElse(__fields.get(2), "").asInstanceOf[_root_.scala.Predef.String],
-      __fieldsMap.getOrElse(__fields.get(3), "").asInstanceOf[_root_.scala.Predef.String],
+      __fieldsMap.getOrElse(__fields.get(3), _root_.com.google.protobuf.ByteString.EMPTY).asInstanceOf[_root_.com.google.protobuf.ByteString],
       __fieldsMap.getOrElse(__fields.get(4), 0).asInstanceOf[_root_.scala.Int],
       __fieldsMap.get(__fields.get(5)).asInstanceOf[scala.Option[com.github.sguzman.ebook.graph.protoc.items.Details]],
       __fieldsMap.getOrElse(__fields.get(6), Nil).asInstanceOf[_root_.scala.collection.Seq[_root_.scala.Predef.String]],
@@ -248,7 +248,7 @@ object Ebook extends scalapb.GeneratedMessageCompanion[com.github.sguzman.ebook.
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(1).get).map(_.as[_root_.scala.Predef.String]).getOrElse(""),
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(2).get).map(_.as[_root_.scala.Predef.String]).getOrElse(""),
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(3).get).map(_.as[_root_.scala.Predef.String]).getOrElse(""),
-        __fieldsMap.get(scalaDescriptor.findFieldByNumber(4).get).map(_.as[_root_.scala.Predef.String]).getOrElse(""),
+        __fieldsMap.get(scalaDescriptor.findFieldByNumber(4).get).map(_.as[_root_.com.google.protobuf.ByteString]).getOrElse(_root_.com.google.protobuf.ByteString.EMPTY),
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(5).get).map(_.as[_root_.scala.Int]).getOrElse(0),
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(6).get).flatMap(_.as[scala.Option[com.github.sguzman.ebook.graph.protoc.items.Details]]),
         __fieldsMap.get(scalaDescriptor.findFieldByNumber(7).get).map(_.as[_root_.scala.collection.Seq[_root_.scala.Predef.String]]).getOrElse(_root_.scala.collection.Seq.empty),
@@ -276,7 +276,7 @@ object Ebook extends scalapb.GeneratedMessageCompanion[com.github.sguzman.ebook.
     def title: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.title)((c_, f_) => c_.copy(title = f_))
     def date: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.date)((c_, f_) => c_.copy(date = f_))
     def img: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.img)((c_, f_) => c_.copy(img = f_))
-    def desc: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Predef.String] = field(_.desc)((c_, f_) => c_.copy(desc = f_))
+    def desc: _root_.scalapb.lenses.Lens[UpperPB, _root_.com.google.protobuf.ByteString] = field(_.desc)((c_, f_) => c_.copy(desc = f_))
     def id: _root_.scalapb.lenses.Lens[UpperPB, _root_.scala.Int] = field(_.id)((c_, f_) => c_.copy(id = f_))
     def detail: _root_.scalapb.lenses.Lens[UpperPB, com.github.sguzman.ebook.graph.protoc.items.Details] = field(_.getDetail)((c_, f_) => c_.copy(detail = Option(f_)))
     def optionalDetail: _root_.scalapb.lenses.Lens[UpperPB, scala.Option[com.github.sguzman.ebook.graph.protoc.items.Details]] = field(_.detail)((c_, f_) => c_.copy(detail = f_))
