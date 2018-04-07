@@ -111,8 +111,7 @@ object Main {
 
     locally {
       val cache = itemCache.books
-      itemCache.links.par.map{a =>
-
+      val books = itemCache.links.par.map{a =>
         extract(a.link)(cache.contains)(cache.apply) {doc =>
           val title = doc.map("h1.post-title").text
           val date = doc.map("time.post-date").text
@@ -164,7 +163,9 @@ object Main {
             next
           )
         }
-      }
+      }.toList
+
+      itemCache.addAllBooks(books)
     }
 
     scribe.info("done")
