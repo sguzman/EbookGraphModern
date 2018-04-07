@@ -112,7 +112,12 @@ object Main {
       itemCache.links.par.foreach{a =>
         val book = extract(a.link)(cache.contains)(cache.apply) {doc =>
           val title = doc.map("h1.post-title").text
-          val date = doc.map("time.post-date").text
+          val date = (doc.maybe("time.post-date") match {
+            case None => doc.map("span.post-date")
+            case Some(v) => v
+          }).text
+
+
           val img = doc.map("div.book-cover > img[src]").attr("src")
           val id = doc.map("""article[id^="post"]""").attr("id").stripPrefix("post-")
           val desc = doc.map("div.entry-inner").text
