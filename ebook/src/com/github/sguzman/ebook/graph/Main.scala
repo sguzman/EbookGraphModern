@@ -1,6 +1,6 @@
 package com.github.sguzman.ebook.graph
 
-import java.io.{File, FileInputStream, FileOutputStream}
+import java.io.{File, FileInputStream, FileOutputStream, PrintWriter}
 
 import com.github.sguzman.ebook.graph.protoc.items.PageDimension.Units
 import com.github.sguzman.ebook.graph.protoc.items._
@@ -10,6 +10,11 @@ import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.model.Element
 import net.ruippeixotog.scalascraper.scraper.ContentExtractors.{element, elementList}
 import org.apache.commons.lang3.StringUtils
+import scalax.collection.Graph
+import scalax.collection.GraphEdge._
+import scalax.collection.GraphPredef._
+import scalax.collection.io.dot._
+import scalax.collection.io.dot.implicits._
 
 object Main {
   var itemCache: ItemStore = identity {
@@ -268,6 +273,38 @@ object Main {
 
       storeCache = storeCache.addAllStore(store)
       writeStoreCache()
+    }
+
+    locally {
+      val root = DotRootGraph(
+        directed = true,
+        id        = Some("Ebooks")
+      )
+
+      def edgeTransformer(innerEdge: Graph[String,DiEdge]#EdgeT): Option[(DotGraph,DotEdgeStmt)] = {
+        val edge = innerEdge.edge
+        Some(root, DotEdgeStmt(NodeId(edge.from.toString), NodeId(edge.to.toString), Nil))
+      }
+
+      val params = storeCache.store.map(a => (a.getBook.title, a.getBook.links, a.getBook.getPrev, a.getBook.getNext))
+      val out = params.flatMap{a =>
+        val links = a._2.filter(b => itemCache.books.contains(b.link)).map(b => itemCache.books(b.link).title).map(b => a._1 ~> b)
+        val prev = if (a._3.link.nonEmpty && itemCache.books.contains(a._3.link)) Seq(a._1 ~> itemCache.books(a._3.link).title) else Seq()
+        val next = if (a._4.link.nonEmpty && itemCache.books.contains(a._4.link)) Seq(a._1 ~> itemCache.books(a._4.link).title) else Seq()
+        links ++ prev ++ next
+      }
+
+      def write(fileName: String, str: String): Unit = {
+        val file = new File(fileName)
+        val pw = new PrintWriter(file)
+        pw.write(str)
+        pw.flush()
+        pw.close()
+      }
+
+      val dot = Graph[String, DiEdge](out: _*).toDot(root, edgeTransformer)
+      write("graph.dot", dot)
+      println(dot)
     }
 
     scribe.info("done")
