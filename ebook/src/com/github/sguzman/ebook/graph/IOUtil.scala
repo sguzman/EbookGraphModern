@@ -3,18 +3,16 @@ package com.github.sguzman.ebook.graph
 import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success}
 import scala.collection.mutable.ListBuffer
+import scala.collection.parallel.ParSeq
 import scala.concurrent.duration.Duration
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object IOUtil {
-  object Async {
-    val work: ListBuffer[(Future[Unit], Throwable => Unit)] =
-      ListBuffer[(Future[Unit], Throwable => Unit)]()
-
-    def ~ : Async.type = Async
+  class Async(work: ParSeq[(Future[Unit], Throwable => Unit)] = ParSeq.empty) {
+    def ~ : Async = new Async
     def sync(): Unit = {
       val errors =
-        work.par.map(a => util.Try(Await.result(a._1, Duration.Inf)) match {
+        work.map(a => util.Try(Await.result(a._1, Duration.Inf)) match {
           case Success(_) => Right(())
           case Failure(e) => Left((a._2, e))
         })
@@ -23,8 +21,6 @@ object IOUtil {
         case Right(_) => false
         case Left(_) => true
       }).map(_.left.get).foreach(a => Future(a._1(a._2)))
-
-      work.clear()
     }
 
     def onError(e: Throwable): Unit = {
@@ -32,10 +28,8 @@ object IOUtil {
       e.printStackTrace()
     }
 
-    def apply(a: => Unit, handle: Throwable => Unit = onError): Async.type = {
-      work.append((Future(a), handle))
-      Async
-    }
+    def apply(a: => Unit, handle: Throwable => Unit = onError): Async =
+      new Async(work :+ (Future(a), handle))
   }
 
   object Sync {
