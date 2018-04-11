@@ -28,6 +28,8 @@ object Main {
             case Right(_) => false
             case Left(_) => true
           }).map(_.left.get).foreach(a => Future(a._1(a._2)))
+
+          work.clear()
         }
 
         def onError(e: Throwable): Unit = {
