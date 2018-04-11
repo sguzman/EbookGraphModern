@@ -1,6 +1,6 @@
 package com.github.sguzman.ebook.graph
 
-import com.github.sguzman.ebook.graph.IOUtil.Pure
+import com.github.sguzman.ebook.graph.IOUtil.Sync
 import com.github.sguzman.ebook.graph.IOUtil.putLine
 
 import scala.concurrent.{Await, Future}
@@ -11,7 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val _ = Pure {
+    val _ = Sync {
       object Async {
         val work: ListBuffer[(Future[Unit], Throwable => Unit)] =
           ListBuffer[(Future[Unit], Throwable => Unit)]()

@@ -9,14 +9,14 @@ object IOUtil {
     println(msg)
   }
 
-  object Pure {
-    def ~ : Pure.type = Pure
+  object Sync {
+    def ~ : Sync.type = Sync
 
-    def apply[A](a: => A, handle: Throwable => Unit = e => throw e): Pure.type = util.Try(a) match {
-      case Success(_) => Pure
+    def apply[A](a: => A, handle: Throwable => Unit = e => throw e): Sync.type = util.Try(a) match {
+      case Success(_) => Sync
       case Failure(e) =>
         handle(e)
-        Pure
+        Sync
     }
   }
 }
