@@ -1,7 +1,5 @@
 package com.github.sguzman.ebook.graph
 
-import cats.effect.IO
-
 import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success}
 import scala.collection.mutable.ListBuffer
