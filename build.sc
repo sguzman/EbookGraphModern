@@ -89,7 +89,7 @@ object ebook extends ScalaModule {
     ivy"org.scalaj::scalaj-http:2.3.0",
     ivy"org.apache.commons:commons-lang3:3.7",
     ivy"net.ruippeixotog::scala-scraper:2.1.0",
-    ivy"org.typelevel::cats-effect:0.10-5b8214f"
+    ivy"net.debasishg::redisclient:3.5"
   )
 
   /** Non maven dependencies */
