@@ -41,13 +41,17 @@ object IO {
   }
 
   object Sync {
-    def ~ : Sync.type = Sync
+    def apply[A](a: => A, handle: Throwable => Unit = e => throw e): Sync = new Sync().apply(a, handle)
+  }
 
-    def apply[A](a: => A, handle: Throwable => Unit = e => throw e): Sync.type = util.Try(a) match {
-      case Success(_) => Sync
+  class Sync {
+    def ~[A](a: => A, handle: Throwable => Unit = e => throw e): Sync = new Sync().apply(a, handle)
+
+    def apply[A](a: => A, handle: Throwable => Unit = e => throw e): Sync = util.Try(a) match {
+      case Success(_) => new Sync()
       case Failure(e) =>
         handle(e)
-        Sync
+        new Sync()
     }
   }
 }
