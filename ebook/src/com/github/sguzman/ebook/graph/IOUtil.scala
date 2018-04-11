@@ -10,6 +10,8 @@ object IOUtil {
   }
 
   object Pure {
+    def ~ : Pure.type = Pure
+
     def apply[A](a: => A, handle: Throwable => Unit = e => throw e): Pure.type = util.Try(a) match {
       case Success(_) => Pure
       case Failure(e) =>
