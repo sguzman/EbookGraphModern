@@ -24,8 +24,6 @@ object Brotli {
       ))
 
       val code = proc.exitValue()
-      println(s"Subprocess exited with code $code.")
-
       output
     }
   }
@@ -49,8 +47,6 @@ object Brotli {
       ))
 
       val code = calcProc.exitValue()
-      println(s"Subprocess exited with code $code.")
-
       output
     }
   }
