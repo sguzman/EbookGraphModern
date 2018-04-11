@@ -10,7 +10,7 @@ object ebook extends ScalaModule {
   def mainClass = Some("com.github.sguzman.ebook.graph.Main")
 
   /** Name of project */
-  def name = "EbookGraph"
+  def name = "EbookGraphModern"
 
   /** Organization */
   def organization = "com.github.sguzman"

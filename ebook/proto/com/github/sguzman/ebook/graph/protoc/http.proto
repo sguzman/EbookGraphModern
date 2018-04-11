@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package com.github.sguzman.ebook.graph.protoc;
-
-message HttpCache {
-    map<string, bytes> cache = 1;
-}
