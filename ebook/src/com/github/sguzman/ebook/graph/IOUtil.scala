@@ -2,12 +2,14 @@ package com.github.sguzman.ebook.graph
 
 import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success}
-import scala.collection.mutable.ListBuffer
 import scala.collection.parallel.ParSeq
 import scala.concurrent.duration.Duration
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object IOUtil {
+  object Async {
+    def apply: Async = new Async
+  }
   class Async(work: ParSeq[(Future[Unit], Throwable => Unit)] = ParSeq.empty) {
     def ~ : Async = new Async
     def sync(): Unit = {
