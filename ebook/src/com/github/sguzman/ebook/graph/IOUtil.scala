@@ -10,7 +10,7 @@ object IOUtil {
   object Async {
     def apply: Async = new Async
   }
-  class Async(work: ParSeq[(Future[Unit], Throwable => Unit)] = ParSeq.empty) {
+  private final class Async(work: ParSeq[(Future[Unit], Throwable => Unit)] = ParSeq.empty) {
     def ~ : Async = new Async
     def sync(): Unit = {
       val errors =
