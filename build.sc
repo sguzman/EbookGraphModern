@@ -87,7 +87,6 @@ object ebook extends ScalaModule {
   /** Ivy dependencies */
   def ivyDeps = Agg(
     ivy"org.scalaj::scalaj-http:2.3.0",
-    ivy"com.outr::scribe:2.3.1",
     ivy"org.apache.commons:commons-lang3:3.7",
     ivy"net.ruippeixotog::scala-scraper:2.1.0",
   )
