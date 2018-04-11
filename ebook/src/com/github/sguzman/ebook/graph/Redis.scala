@@ -5,6 +5,7 @@ import java.net.SocketTimeoutException
 import com.github.sguzman.brotli.Brotli
 import com.redis.RedisClient
 import scalaj.http.Http
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
