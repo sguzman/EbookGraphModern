@@ -10,7 +10,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 object Redis {
-  lazy val redis = new RedisClient("localhost", 6379)
+  lazy val redis: RedisClient = new RedisClient("localhost", 6379)
 
   def http(url: String): String = util.Try(Http(url).asString) match {
     case Success(v) => v.body
@@ -20,11 +20,12 @@ object Redis {
     }
   }
 
-  def cache(ns: String, url: String, redis: RedisClient = redis) =
+  def cache(ns: String, url: String, redis: RedisClient = redis): String =
     redis.get[Array[Byte]](s"$ns:$url") match {
       case None =>
         val body = http(url)
         Future(redis.set(s"$ns:$url", Brotli.compress(body)))
         body
       case Some(v) => Brotli.decompress(v)
+    }
 }
