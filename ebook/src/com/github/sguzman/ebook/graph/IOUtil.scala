@@ -38,10 +38,6 @@ object IOUtil {
     }
   }
 
-  def putLine(msg: => String): IO[Unit] = IO {
-    println(msg)
-  }
-
   object Sync {
     def ~ : Sync.type = Sync
 

@@ -1,6 +1,6 @@
 package com.github.sguzman.ebook.graph
 
-import com.github.sguzman.ebook.graph.IOUtil.{Async, Sync, putLine}
+import com.github.sguzman.ebook.graph.IOUtil.{Async, Sync}
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -11,7 +11,7 @@ object Main {
 
       }
     } ~ {
-      putLine("done").unsafeRunSync()
+      println("done")
     }
   }
 }
