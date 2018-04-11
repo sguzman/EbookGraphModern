@@ -4,6 +4,8 @@ import java.net.SocketTimeoutException
 
 import com.github.sguzman.brotli.Brotli
 import com.redis.RedisClient
+import com.redis.serialization._
+import com.redis.serialization.Parse.Implicits._
 import scalaj.http.Http
 import scala.concurrent.ExecutionContext.Implicits.global
 
