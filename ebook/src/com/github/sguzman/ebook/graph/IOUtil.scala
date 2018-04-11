@@ -17,7 +17,7 @@ object IOUtil {
   }
 
   final class Async(work: ParSeq[(Future[Unit], Throwable => Unit)] = ParSeq.empty) {
-    def ~ : Async = new Async
+    def ~[A](a: => A, handle: Throwable => Unit = onError): Async = new Async().apply(a, handle)
     def sync(): Unit = {
       val errors =
         work.map(a => util.Try(Await.result(a._1, Duration.Inf)) match {
