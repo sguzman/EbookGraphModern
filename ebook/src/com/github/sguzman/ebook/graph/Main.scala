@@ -8,7 +8,7 @@ object Main {
       Async {
         println("begin")
       } ~ {
-
+        println("next")
       }
     } ~ {
       println("done")

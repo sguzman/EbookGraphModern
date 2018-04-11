@@ -8,9 +8,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object IOUtil {
   object Async {
-    def apply: Async = new Async
+    def onError(e: Throwable): Unit = {
+      println(e.getMessage)
+      e.printStackTrace()
+    }
+
+    def apply[A](a: => A, handle: Throwable => Unit = onError): Async = new Async().apply(a, handle)
   }
-  private final class Async(work: ParSeq[(Future[Unit], Throwable => Unit)] = ParSeq.empty) {
+
+  final class Async(work: ParSeq[(Future[Unit], Throwable => Unit)] = ParSeq.empty) {
     def ~ : Async = new Async
     def sync(): Unit = {
       val errors =
