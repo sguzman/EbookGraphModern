@@ -92,5 +92,13 @@ object ebook extends ScalaModule {
     ivy"org.typelevel::cats-effect:0.10-5b8214f"
   )
 
+  /** Non maven dependencies */
+  def unmanagedClasspath = Agg(
+    mill.modules.Util.download(
+      "https://github.com/sguzman/BrotliExec/releases/download/v1.0.1/com.github.sguzman.brotli.brotliexec.1.0.1.jar",
+      "com.github.sguzman.brotliexec.1.0.1.jar"
+    )
+  )
+
   def forkArgs = Seq("-Xmx4g")
 }
