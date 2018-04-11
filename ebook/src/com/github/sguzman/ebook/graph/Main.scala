@@ -1,7 +1,5 @@
 package com.github.sguzman.ebook.graph
 
-import java.io.{File, FileInputStream, FileOutputStream, PrintWriter}
-
 import net.ruippeixotog.scalascraper.browser.{Browser, JsoupBrowser}
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.model.Element
