@@ -6,7 +6,7 @@ import scala.collection.parallel.ParSeq
 import scala.concurrent.duration.Duration
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object IOUtil {
+object IO {
   object Async {
     def onError(e: Throwable): Unit = {
       println(e.getMessage)

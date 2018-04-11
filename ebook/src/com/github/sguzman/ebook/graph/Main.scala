@@ -1,6 +1,6 @@
 package com.github.sguzman.ebook.graph
 
-import com.github.sguzman.ebook.graph.IOUtil.{Async, Sync}
+import com.github.sguzman.ebook.graph.IO.{Async, Sync}
 import slick.jdbc.PostgresProfile.api._
 
 object Main {
