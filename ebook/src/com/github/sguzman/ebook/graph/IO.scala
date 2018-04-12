@@ -37,7 +37,7 @@ object IO {
     }
 
     def apply(a: => Unit, handle: Throwable => Unit = onError): Async =
-      new Async(work :+ (Future(a), handle))
+      new Async(work :+ ((Future(a), handle)))
   }
 
   object Sync {
