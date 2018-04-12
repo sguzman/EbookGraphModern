@@ -13,11 +13,9 @@ import scala.util.{Failure, Success}
 
 object Redis {
   lazy val redis: RedisClient = identity {
-    Runtime.getRuntime.addShutdownHook(new Thread(new Runnable {
-      override def run(): Unit = {
-        println("Disconnecting Redis")
-        redis.disconnect
-      }
+    Runtime.getRuntime.addShutdownHook(new Thread(() => {
+      println("Disconnecting Redis")
+      redis.disconnect
     }))
     new RedisClient("localhost", 6379)
   }
