@@ -12,7 +12,15 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 object Redis {
-  lazy val redis: RedisClient = new RedisClient("localhost", 6379)
+  lazy val redis: RedisClient = identity {
+    Runtime.getRuntime.addShutdownHook(new Thread(new Runnable {
+      override def run(): Unit = {
+        println("Disconnecting Redis")
+        redis.disconnect
+      }
+    }))
+    new RedisClient("localhost", 6379)
+  }
 
   def http(url: String): String = util.Try(Http(url).asString) match {
     case Success(v) => v.body
