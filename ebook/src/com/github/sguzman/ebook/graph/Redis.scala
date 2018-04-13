@@ -13,6 +13,8 @@ import scala.util.{Failure, Success}
 
 object Redis {
   lazy val redis: RedisClient = identity {
+    println("Init Redis...")
+
     Runtime.getRuntime.addShutdownHook(new Thread(() => {
       println("Disconnecting Redis")
       redis.disconnect
