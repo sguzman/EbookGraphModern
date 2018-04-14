@@ -11,7 +11,7 @@ import scala.collection.concurrent.TrieMap
 import scala.util.{Failure, Success}
 
 object Cache {
-  private val ns = "ebooks"
+  private val ns = "ebooks:http"
 
   private lazy val cachingService: (TrieMap[String, Array[Byte]], RedisClient) = identity {
     val redis = cachingService._2
