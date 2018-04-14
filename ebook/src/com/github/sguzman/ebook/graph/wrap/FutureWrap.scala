@@ -1,4 +1,4 @@
-package com.github.sguzman.ebook.graph
+package com.github.sguzman.ebook.graph.wrap
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

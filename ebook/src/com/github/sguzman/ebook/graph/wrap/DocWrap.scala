@@ -1,4 +1,4 @@
-package com.github.sguzman.ebook.graph
+package com.github.sguzman.ebook.graph.wrap
 
 import net.ruippeixotog.scalascraper.browser.Browser
 import net.ruippeixotog.scalascraper.dsl.DSL._
