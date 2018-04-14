@@ -10,9 +10,9 @@ import scala.concurrent.duration.Duration
 import scala.util.{Failure, Success}
 
 object Mem {
-  val ns = "ebooks"
+  private val ns = "ebooks"
 
-  lazy val memcached: Memcached = identity {
+  private lazy val memcached: Memcached = identity {
     println("Init memcached client...")
     Runtime.getRuntime.addShutdownHook(new Thread(() => {
       println("Closing memcached client...")
