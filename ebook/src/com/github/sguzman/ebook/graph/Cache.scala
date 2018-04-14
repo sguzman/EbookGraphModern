@@ -11,10 +11,10 @@ import scala.collection.concurrent.TrieMap
 import scala.util.{Failure, Success}
 
 object Cache {
-  private val ns = "ebooks:http"
+  private val ns: String = "ebooks:http"
 
   private lazy val cachingService: (TrieMap[String, Array[Byte]], RedisClient) = identity {
-    val redis = new RedisClient("localhost", 6379)
+    val redis: RedisClient = new RedisClient(host = "localhost", port = 6379)
     println("Init caching client...")
     val cache: TrieMap[String, Array[Byte]] = redis.hgetall1[String, Array[Byte]](ns) match {
       case None =>
@@ -51,7 +51,7 @@ object Cache {
     cache.get(key) match {
       case None =>
         println(s"Miss Http cache for key $key")
-        val body = http(key)
+        val body: String = http(key)
         cache.put(key, Brotli.compress(body))
         body
       case Some(v) =>
