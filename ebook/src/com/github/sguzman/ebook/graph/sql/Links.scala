@@ -19,7 +19,7 @@ object Links {
     val created = Util.db.run(MTable.getTables)
       .map(_.exists(_.name.name == "links"))
       .map({cond =>
-        if (cond) {
+        if (!cond) {
             println("Creating SChema for links")
             Util.db.run(DBIO.seq(table.schema.create))
           }
