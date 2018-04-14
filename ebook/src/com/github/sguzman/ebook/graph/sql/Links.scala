@@ -31,6 +31,11 @@ object Links {
     table
   }
 
-  def insert(col: Seq[String]): Unit = Util.db.run(DBIO.seq(linkTable ++= col.map((0L, _)))).v
-  def insert(col: ParSeq[String]): Unit = Util.db.run(DBIO.seq(linkTable ++= col.toIndexedSeq.map((0L, _)))).v
+  def insert(col: Seq[String]): Unit = {
+    val _: Unit = Util.db.run(DBIO.sequence(col.map(a => linkTable.insertOrUpdate(0L, a)))).v
+  }
+
+  def insert(col: ParSeq[String]): Unit = {
+    val _: Unit = Util.db.run(DBIO.sequence(col.toIterator.map(a => linkTable.insertOrUpdate(0L, a)))).v
+  }
 }
