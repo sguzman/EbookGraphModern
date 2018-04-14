@@ -11,6 +11,6 @@ object Util {
       println("Closing pg")
       db.close()
     }))
-    Database.forURL("jdbc:postgresql://localhost:5432/postgres", driver = "org.postgresql.Driver", user = "alice", password = "pass")
+    Database.forURL("jdbc:postgresql://localhost:5432/ebooks", driver = "org.postgresql.Driver", user = "alice", password = "pass")
   }
 }
