@@ -32,7 +32,7 @@ object Mem {
   }
 
   def cache(url: String, ns: String = ns, mem: Memcached = memcached): String =
-    memcached.awaitGet(s"$ns:$url") match {
+    memcached.awaitGet[Array[Byte]](s"$ns:$url") match {
       case None =>
         val body = http(url)
         memcached.awaitSet(s"$ns:$url", Brotli.compress(body), Duration.Inf)
