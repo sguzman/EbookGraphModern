@@ -12,7 +12,7 @@ object Links {
 
   private final case class Links(tag: Tag) extends Table[(Long, String)](tag, name) {
     def id = column[Long]("id", O.Unique, O.PrimaryKey, O.AutoInc)
-    def link = column[String]("link", O.Length(150), O.Unique)
+    def link = column[String]("link", O.Length(200), O.Unique)
 
     def * = (id, link)
   }
