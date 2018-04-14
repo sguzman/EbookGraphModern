@@ -94,7 +94,7 @@ object ebook extends ScalaModule {
     ivy"com.typesafe.slick::slick:3.2.3",
     ivy"org.slf4j:slf4j-simple:1.8.0-beta2",
     ivy"org.typelevel::cats-effect:0.10-5b8214f",
-    ivy"io.monix::shade:1.10.0-d712897"
+    ivy"net.debasishg::redisclient:3.5",
   )
 
   /** Non maven dependencies */
