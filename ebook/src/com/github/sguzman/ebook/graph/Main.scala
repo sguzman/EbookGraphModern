@@ -22,7 +22,6 @@ object Main {
 
       val insertIfAbsent = IO {
         val diff = links.toSet.diff(incumbent).toSeq
-        println(s"Inserting ${diff.length} items into pg table")
         Links.insert(diff)
       }
 
