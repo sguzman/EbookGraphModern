@@ -14,8 +14,11 @@ object Redis {
     println("Init Redis...")
 
     Runtime.getRuntime.addShutdownHook(new Thread(() => {
-      println("Disconnecting Redis")
-      redis.disconnect
+      println("Disconnecting Redis...")
+      if (redis.disconnect)
+        println("Disconnect successful")
+      else
+        println("Bad disconnect")
     }))
     new RedisClient("localhost", 6379)
   }
