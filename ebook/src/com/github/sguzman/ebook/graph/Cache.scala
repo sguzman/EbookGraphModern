@@ -32,7 +32,7 @@ object Cache {
     }
   }
 
-  private def get(url: String, ns: String = ns, client: RedisClient = redis): String =
+  def get(url: String, ns: String = ns, client: RedisClient = redis): String =
     client.get[Array[Byte]](s"$ns:$url") match {
       case None =>
         println(s"Miss Http cache for key $url")

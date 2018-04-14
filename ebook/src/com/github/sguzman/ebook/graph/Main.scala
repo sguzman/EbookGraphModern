@@ -11,7 +11,7 @@ object Main {
 
       val links = pages.par.map{a =>
         val url = s"https://it-eb.com/page/$a/"
-        val body = Cache.cache(url)
+        val body = Cache.get(url)
         val doc = body.doc
         val links = "article.post > div.post-inner > div.post-content > div.post-header > h2.post-title > a[href]"
         doc.flatMap(links).map(_.attr("href"))
