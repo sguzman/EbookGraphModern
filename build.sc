@@ -93,7 +93,8 @@ object ebook extends ScalaModule {
     ivy"org.postgresql:postgresql:42.2.2.jre7",
     ivy"com.typesafe.slick::slick-hikaricp:3.2.3",
     ivy"com.typesafe.slick::slick:3.2.3",
-    ivy"org.slf4j:slf4j-nop:1.8.0-beta2"
+    ivy"org.slf4j:slf4j-simple:1.8.0-beta2",
+    ivy"org.typelevel::cats-effect:0.10-5b8214f"
   )
 
   /** Non maven dependencies */
