@@ -23,8 +23,7 @@ object Links {
             println("Creating SChema for links")
             Util.db.run(DBIO.seq(table.schema.create))
           }
-        else
-          ()
+        else ()
       })
 
     created.v
