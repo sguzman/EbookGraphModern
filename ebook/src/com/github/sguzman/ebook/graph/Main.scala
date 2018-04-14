@@ -18,6 +18,7 @@ object Main {
         doc.flatMap(links).map(_.attr("href"))
       }
 
+      println(s"Inserting ${links.length} items into pg table")
       Links.insert(links)
     }
   }
