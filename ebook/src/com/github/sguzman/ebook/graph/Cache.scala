@@ -6,8 +6,6 @@ import com.github.sguzman.brotli.Brotli
 import com.redis.RedisClient
 import scalaj.http.Http
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
 import scala.util.{Failure, Success}
 
 object Cache {
