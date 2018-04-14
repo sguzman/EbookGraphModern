@@ -3,7 +3,7 @@ package com.github.sguzman.ebook.graph
 import java.net.SocketTimeoutException
 
 import com.github.sguzman.brotli.Brotli
-import com.redis.RedisClient
+import com.redis._
 import scalaj.http.Http
 
 import scala.util.{Failure, Success}
