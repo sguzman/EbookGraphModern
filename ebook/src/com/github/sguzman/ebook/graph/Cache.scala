@@ -4,6 +4,7 @@ import java.net.SocketTimeoutException
 
 import com.github.sguzman.brotli.Brotli
 import com.redis._
+import com.redis.serialization.Parse.Implicits._
 import scalaj.http.Http
 
 import scala.util.{Failure, Success}
