@@ -5,6 +5,8 @@ import slick.jdbc.PostgresProfile.api._
 
 object Util {
   lazy val db: PostgresProfile.backend.DatabaseDef = identity {
+    println("Init sql connection...")
+
     Runtime.getRuntime.addShutdownHook(new Thread(() => {
       println("Closing pg")
       db.close()
