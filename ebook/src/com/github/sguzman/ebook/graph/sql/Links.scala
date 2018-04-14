@@ -14,12 +14,12 @@ final case class Links(tag: Tag) extends Table[(Long, String)](tag, "links") {
 object Links {
   lazy val linkTable = identity {
     val table = TableQuery[Links]
-    val created = SQL.db.run(MTable.getTables)
+    val created = Util.db.run(MTable.getTables)
       .map(_.exists(_.name.name == "links"))
       .filter(a => a)
       .map({_ =>
         println("Creating SChema for links")
-        SQL.db.run(DBIO.seq(table.schema.create))
+        Util.db.run(DBIO.seq(table.schema.create))
       })
 
     created.v
