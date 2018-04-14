@@ -1,6 +1,7 @@
 package com.github.sguzman.ebook.graph
 
 import slick.jdbc.PostgresProfile
+import slick.jdbc.PostgresProfile.api._
 
 object SQL {
   lazy val db: PostgresProfile.backend.DatabaseDef = identity {
