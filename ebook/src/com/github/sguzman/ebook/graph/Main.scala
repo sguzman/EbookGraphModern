@@ -1,31 +1,25 @@
 package com.github.sguzman.ebook.graph
 
-import com.github.sguzman.ebook.graph.IO.{Async, Sync}
-import slick.jdbc.PostgresProfile
 import slick.jdbc.PostgresProfile.api._
-import slick.jdbc.meta.MTable
-
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
+import com.github.sguzman.ebook.graph.DocWrap._
+import com.github.sguzman.ebook.graph.StrWrap._
 
 object Main {
   def main(args: Array[String]): Unit = {
-    lazy val db: PostgresProfile.backend.DatabaseDef = identity {
-      Runtime.getRuntime.addShutdownHook(new Thread(() => {
-        println("Closing pg")
-        db.close()
-      }))
-      Database.forURL("jdbc:postgresql://localhost:5432/postgres", driver = "org.postgresql.Driver", user = "alice", password = "pass")
-    }
-    val _ = Sync {
+    val ns = "ebooks"
+    val cache = Redis.cache(ns, _: String)
 
-      Async {
-        println("begin")
-      } ~ {
+    val linkTable = TableQuery[Links]
+    println(linkTable)
 
-      }
-    } ~ {
-      println("done")
+    val pages = 1 until 1256
+    val links = pages.par.flatMap{a =>
+      val url = s"https://it-eb.com/page/$a/"
+      val body = cache(url)
+      val doc = body.doc
+
+      doc.flatMap("article.post > div.post-inner > div.post-content > div.post-header > h2.post-title > a[href]")
+        .map(_.attr("href"))
     }
   }
 }
