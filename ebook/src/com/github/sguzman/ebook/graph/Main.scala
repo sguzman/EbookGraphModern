@@ -1,6 +1,7 @@
 package com.github.sguzman.ebook.graph
 
 import com.github.sguzman.ebook.graph.io.Sync
+import com.github.sguzman.ebook.graph.sql.Links
 import com.github.sguzman.ebook.graph.wrap.DocWrap._
 import com.github.sguzman.ebook.graph.wrap.StrWrap._
 
@@ -9,7 +10,7 @@ object Main {
     val _ = Sync {
       val pages = 1 to 623
 
-      val links = pages.par.map{a =>
+      val links = pages.par.flatMap{a =>
         val url = s"https://www.foxebook.net/page/$a/?sort=default"
         val body = Cache.get(url)
         val doc = body.doc
@@ -17,7 +18,7 @@ object Main {
         doc.flatMap(links).map(_.attr("href"))
       }
 
-      links foreach println
+      Links.insert(links)
     }
   }
 }
