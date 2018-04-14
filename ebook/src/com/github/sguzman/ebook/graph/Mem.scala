@@ -5,6 +5,7 @@ import java.net.SocketTimeoutException
 import com.github.sguzman.brotli.Brotli
 import scalaj.http.Http
 import shade.memcached.{Configuration, Memcached}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.duration.Duration
 import scala.util.{Failure, Success}
