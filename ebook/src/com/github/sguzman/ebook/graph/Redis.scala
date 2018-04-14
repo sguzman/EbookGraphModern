@@ -23,7 +23,7 @@ object Redis {
     new RedisClient("localhost", 6379)
   }
 
-  def http(url: String): String = util.Try(Http(url).asString) match {
+  private def http(url: String): String = util.Try(Http(url).asString) match {
     case Success(v) => v.body
     case Failure(e) => e match {
       case _: SocketTimeoutException => http(url)
