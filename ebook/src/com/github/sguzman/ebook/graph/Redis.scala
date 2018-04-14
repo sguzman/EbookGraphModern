@@ -7,6 +7,7 @@ import com.redis.RedisClient
 import com.redis.serialization.Parse.Implicits._
 import scalaj.http.Http
 
+import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 object Redis {
@@ -31,15 +32,25 @@ object Redis {
     }
   }
 
-  def cache(ns: String, url: String, redis: RedisClient = redis): String =
+  private def _setIfNew(key: String, body: Array[Byte], redis: RedisClient) =
+    if (redis.exists(key))
+      println(s"Redis key $key exists already")
+    else synchronized {
+      println(s"Setting Redis key $key")
+      redis.set(key, body)
+    }
+
+  private def setIfNew(ns: String, url: String, body: String, redis: RedisClient = redis): Unit =
+    _setIfNew(s"$ns:$url", Brotli.compress(body), redis)
+
+  def cache(ns: String, url: String, redis: RedisClient = redis): (String, Future[Unit]) =
     redis.get[Array[Byte]](s"$ns:$url") match {
       case None =>
         println(s"Missed Http cache for $url")
         val body = http(url)
-        redis.set(s"$ns:$url", Brotli.compress(body))
-        body
+        (body, Future(setIfNew(ns, url, body)))
       case Some(v) =>
         println(s"Hit Http cache for $url")
-        Brotli.decompress(v)
+        (Brotli.decompress(v), Future.unit)
     }
 }
