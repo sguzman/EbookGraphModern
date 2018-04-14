@@ -14,7 +14,7 @@ object Cache {
   private val ns = "ebooks:http"
 
   private lazy val cachingService: (TrieMap[String, Array[Byte]], RedisClient) = identity {
-    val redis = cachingService._2
+    val redis = new RedisClient("localhost", 6379)
     println("Init caching client...")
     val cache: TrieMap[String, Array[Byte]] = redis.hgetall1[String, Array[Byte]](ns) match {
       case None =>
@@ -36,7 +36,7 @@ object Cache {
         println("Could not disconnect")
     }))
 
-    (cache, new RedisClient("localhost", 6379))
+    (cache, redis)
   }
 
   private def http(url: String): String = util.Try(Http(url).asString) match {
