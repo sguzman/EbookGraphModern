@@ -8,9 +8,11 @@ import scala.collection.parallel.ParSeq
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object Links {
-  private final case class Links(tag: Tag) extends Table[(Long, String)](tag, "links") {
+  val name = "links"
+
+  private final case class Links(tag: Tag) extends Table[(Long, String)](tag, name) {
     def id = column[Long]("id", O.Unique, O.PrimaryKey, O.AutoInc)
-    def link = column[String]("link", O.Length(100), O.Unique)
+    def link = column[String]("link", O.Length(150), O.Unique)
 
     def * = (id, link)
   }
@@ -18,7 +20,7 @@ object Links {
   private lazy val linkTable = identity {
     val table = TableQuery[Links]
     val created = Util.db.run(MTable.getTables)
-      .map(_.exists(_.name.name == "links"))
+      .map(_.exists(_.name.name == name))
       .map({cond =>
         if (!cond) {
             println("Creating SChema for links")
@@ -32,10 +34,12 @@ object Links {
   }
 
   def insert(col: Seq[String]): Unit = {
+    println(s"Inserting ${col.length} items into $name")
     val _: Unit = Util.db.run(DBIO.sequence(col.map(a => linkTable.insertOrUpdate(0L, a)))).v
   }
 
   def insert(col: ParSeq[String]): Unit = {
+    println(s"Inserting ${col.length} items into $name")
     val _: Unit = Util.db.run(DBIO.sequence(col.toIterator.map(a => linkTable.insertOrUpdate(0L, a)))).v
   }
 }
