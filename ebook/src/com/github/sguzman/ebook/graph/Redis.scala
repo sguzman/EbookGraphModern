@@ -31,9 +31,12 @@ object Redis {
   def cache(ns: String, url: String, redis: RedisClient = redis): String =
     redis.get[Array[Byte]](s"$ns:$url") match {
       case None =>
+        println(s"Missed Http cache for $url")
         val body = http(url)
         redis.set(s"$ns:$url", Brotli.compress(body))
         body
-      case Some(v) => Brotli.decompress(v)
+      case Some(v) =>
+        println(s"Hit Http cache for $url")
+        Brotli.decompress(v)
     }
 }
