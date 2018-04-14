@@ -34,9 +34,12 @@ object Mem {
   def cache(url: String, ns: String = ns, mem: Memcached = memcached): String =
     memcached.awaitGet[Array[Byte]](s"$ns:$url") match {
       case None =>
+        println(s"Miss Http cache for key $url")
         val body = http(url)
         memcached.awaitSet(s"$ns:$url", Brotli.compress(body), Duration.Inf)
         body
-      case Some(v) => Brotli.decompress(v)
+      case Some(v) =>
+        println(s"Hit Http cache for key $url")
+        Brotli.decompress(v)
     }
 }
