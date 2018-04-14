@@ -6,9 +6,7 @@ import com.github.sguzman.brotli.Brotli
 import com.redis.RedisClient
 import com.redis.serialization.Parse.Implicits._
 import scalaj.http.Http
-import scala.concurrent.ExecutionContext.Implicits.global
 
-import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 object Redis {
@@ -34,7 +32,7 @@ object Redis {
     redis.get[Array[Byte]](s"$ns:$url") match {
       case None =>
         val body = http(url)
-        Future(redis.set(s"$ns:$url", Brotli.compress(body)))
+        redis.set(s"$ns:$url", Brotli.compress(body))
         body
       case Some(v) => Brotli.decompress(v)
     }
