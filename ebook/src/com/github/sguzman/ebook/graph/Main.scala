@@ -1,5 +1,6 @@
 package com.github.sguzman.ebook.graph
 
+import cats.effect.IO
 import com.github.sguzman.ebook.graph.io.Sync
 import com.github.sguzman.ebook.graph.sql.Links
 import com.github.sguzman.ebook.graph.wrap.DocWrap._
@@ -10,6 +11,7 @@ object Main {
     val _ = Sync {
       val pages = 1 to 623
 
+      val incumbent = Links.get
       val links = pages.par.flatMap{a =>
         val url = s"https://www.foxebook.net/page/$a/?sort=default"
         val body = Cache.get(url)
@@ -18,8 +20,13 @@ object Main {
         doc.flatMap(links).map(_.attr("href"))
       }
 
-      println(s"Inserting ${links.length} items into pg table")
-      Links.insert(links)
+      val insertIfAbsent = IO {
+        val diff = links.toSet.diff(incumbent).toSeq
+        println(s"Inserting ${diff.length} items into pg table")
+        Links.insert(diff)
+      }
+
+      insertIfAbsent.unsafeRunSync()
     }
   }
 }
