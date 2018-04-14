@@ -1,4 +1,4 @@
-package com.github.sguzman.ebook.graph
+package com.github.sguzman.ebook.graph.sql
 
 import slick.jdbc.PostgresProfile
 import slick.jdbc.PostgresProfile.api._

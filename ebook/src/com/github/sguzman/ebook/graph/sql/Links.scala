@@ -1,9 +1,8 @@
-package com.github.sguzman.ebook.graph
-
-import slick.jdbc.PostgresProfile.api._
-import slick.jdbc.meta.MTable
+package com.github.sguzman.ebook.graph.sql
 
 import com.github.sguzman.ebook.graph.wrap.FutureWrap._
+import slick.jdbc.PostgresProfile.api._
+import slick.jdbc.meta.MTable
 
 final case class Links(tag: Tag) extends Table[(Long, String)](tag, "links") {
   def id = column[Long]("id", O.Unique, O.PrimaryKey, O.AutoInc)
