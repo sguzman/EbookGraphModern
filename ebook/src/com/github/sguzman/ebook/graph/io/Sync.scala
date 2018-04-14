@@ -1,4 +1,4 @@
-package com.github.sguzman.ebook.graph
+package com.github.sguzman.ebook.graph.io
 
 import scala.util.{Failure, Success}
 

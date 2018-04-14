@@ -1,10 +1,10 @@
-package com.github.sguzman.ebook.graph
+package com.github.sguzman.ebook.graph.io
 
 import scala.collection.parallel.ParSeq
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration.Duration
-import scala.util.{Failure, Success}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
+import scala.util.{Failure, Success}
 
 object Async {
   def onError(e: Throwable): Unit = {
