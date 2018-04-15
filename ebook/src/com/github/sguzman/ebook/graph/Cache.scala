@@ -112,6 +112,38 @@ object Cache {
         insertIfAbsent.unsafeRunSync()
         retVals
       }
+
+      def map[A, B, C](col: ParSeq[A], table: TableLike[C, B])(body: String => B)(toUrl: A => String): ParSeq[B]  = {
+        val results: ParSeq[(Option[String], String)] = col.map(toUrl).map(get)
+        val (missing, htmlBody): (ParSeq[Option[String]], ParSeq[String]) = results.unzip
+        val newValues: ParSeq[(String, String)] = missing
+          .zipWithIndex
+          .filter(_._1.isDefined)
+          .map(a => (a._1.get, a._2))
+          .map(a => (a._1, htmlBody(a._2)))
+
+        val brotli: ParSeq[(String, Array[Byte])] = newValues.map(a => {
+          val key = a._1
+          println(s"Compressing html body for key $key")
+          val body = Brotli.compress(a._2)
+          (key, body)
+        })
+
+        println(s"${brotli.length} new http cache entries in this session")
+        furtherWrites.append(brotli)
+
+        val retVals: ParSeq[B] = htmlBody.map(body)
+
+        val insertIfAbsent = IO {
+          val incumbent: ParSet[B] = table.get
+          val newVals: ParSet[B] = retVals.toSet[B]
+          val diff: ParSet[B] = newVals.diff(incumbent)
+          table.insert(diff)
+        }
+
+        insertIfAbsent.unsafeRunSync()
+        retVals
+      }
     }
 
     CacheMeOutside
