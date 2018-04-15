@@ -18,6 +18,8 @@ object Main {
         doc.flatMap(links).map(_.attr("href"))
       } (a => s"https://it-eb.com/page/$a/")
     } ~ {links =>
+      type Row = (Long, String, String, String, Int, String, String, String, String, String, String, Int, String, Double, String)
+
       Cache.get.map(links, Ebooks.table) {body =>
         val doc = body.doc
 
@@ -50,7 +52,7 @@ object Main {
         val categories = doc.flatMap("div.btm-post-meta > p.post-btm-cats > a[href]").map(_.text)
         val prev = doc.maybe("li.prev > a[href]").map(_.attr("href")).getOrElse("")
         val next = doc.maybe("li.next > a[href]").map(_.attr("href")).getOrElse("")
-        ((0L, title, date, img, id, desc, publisher, author, pubDate, isbn10, isbn13, pages, format, size, sizeType), a => (a, relatedPosts, categories, prev, next))
+        ((0L, title, date, img, id, desc, publisher, author, pubDate, isbn10, isbn13, pages, format, size, sizeType), (a: Row) => (a, relatedPosts, categories, prev, next))
       } (identity)
     } ~ {data =>
       println(data)
