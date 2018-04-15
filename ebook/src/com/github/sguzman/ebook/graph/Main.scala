@@ -43,7 +43,7 @@ object Main {
         val isbn13 = detailMap.getOrElse("isbn-13", "")
         val pages = detailMap.getOrElse("pages", "").stripSuffix(" pages").toInt
         val format = detailMap("format")
-        val size = detailMap.getOrElse("size", "-1__").init.init.toInt
+        val size = detailMap.getOrElse("size", "-1__").init.init.toDouble
         val sizeType = detailMap.getOrElse("size", "kb").stripPrefix(size.toString)
 
         val relatedPosts = doc.flatMap("li.related-article > article.post > figure.post-thumbnail > a[href]").map(_.attr("href"))

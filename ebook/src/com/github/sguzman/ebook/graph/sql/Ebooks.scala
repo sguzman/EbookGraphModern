@@ -11,7 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object Ebooks {
   lazy val table = identity {
     val name = "ebookinfo"
-    type Row = (Long, String, String, String, Int, String, String, String, String, String, String, Int, String, Int, String)
+    type Row = (Long, String, String, String, Int, String, String, String, String, String, String, Int, String, Double, String)
 
     final case class EbookInfo(tag: Tag) extends Table[Row](tag, name) {
       def id = column[Long]("id", O.Unique, O.PrimaryKey, O.AutoInc)
@@ -27,7 +27,7 @@ object Ebooks {
       def isbn13 = column[String]("isbn13")
       def pages = column[Int]("pages")
       def format = column[String]("format")
-      def size = column[Int]("size")
+      def size = column[Double]("size")
       def sizeType = column[String]("sizeType")
 
       def * : ProvenShape[Row] = (id, title, date, img, ebookId, desc, publisher, authors, pubDate, isbn10, isbn13, pages, format, size, sizeType)
