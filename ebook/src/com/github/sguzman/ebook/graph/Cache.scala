@@ -81,7 +81,7 @@ object Cache {
       private def get(key: String): (Option[String], String) =
         _get(incumbent, key)
 
-      def flatMap[A, B, C](col: ParSeq[A], table: TableLike[C])(body: String => Seq[B])(toUrl: A => String): ParSeq[B]  = {
+      def flatMap[A, B, C](col: ParSeq[A], table: TableLike[C, B])(body: String => Seq[B])(toUrl: A => String): ParSeq[B]  = {
         val results: ParSeq[(Option[String], String)] = col.map(toUrl).map(get)
         val (missing, htmlBody): (ParSeq[Option[String]], ParSeq[String]) = results.unzip
         val newValues: ParSeq[(String, String)] = missing
