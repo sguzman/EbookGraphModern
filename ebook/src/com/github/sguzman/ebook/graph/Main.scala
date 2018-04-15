@@ -41,7 +41,7 @@ object Main {
         val pubDate = detailMap.getOrElse("publication date", "")
         val isbn10 = detailMap.getOrElse("isbn-10", "")
         val isbn13 = detailMap.getOrElse("isbn-13", "")
-        val pages = detailMap.getOrElse("pages", "").stripSuffix(" pages").toInt
+        val pages = detailMap.getOrElse("pages", "-1").stripSuffix(" pages").toInt
         val format = detailMap("format")
         val size = detailMap.getOrElse("size", "-1__").init.init.toDouble
         val sizeType = detailMap.getOrElse("size", "kb").stripPrefix(size.toString)
