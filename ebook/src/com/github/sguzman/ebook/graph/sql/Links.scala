@@ -8,16 +8,15 @@ import scala.collection.parallel.ParSeq
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object Links {
-  val name = "links"
+  private lazy val table = identity {
+    val name = "links"
+    private final case class Links(tag: Tag) extends Table[(Long, String)](tag, name) {
+      def id = column[Long]("id", O.Unique, O.PrimaryKey, O.AutoInc)
+      def link = column[String]("link", O.Length(200), O.Unique)
 
-  private final case class Links(tag: Tag) extends Table[(Long, String)](tag, name) {
-    def id = column[Long]("id", O.Unique, O.PrimaryKey, O.AutoInc)
-    def link = column[String]("link", O.Length(200), O.Unique)
+      def * = (id, link)
+    }
 
-    def * = (id, link)
-  }
-
-  private lazy val linkTable = identity {
     val table = TableQuery[Links]
     val created = Util.db.run(MTable.getTables)
       .map(_.exists(_.name.name == name))
@@ -30,18 +29,20 @@ object Links {
       })
 
     created.v
-    table
-  }
+    object Table extends TableLike[Links] {
+      def insert(col: Seq[String], table: TableQuery[Links]): Unit = {
+        println(s"Inserting ${col.length} items into $name")
+        val _ = Util.db.run(DBIO.sequence(col.map(a => table.insertOrUpdate((0L, a))))).v
+      }
 
-  def insert(col: Seq[String]): Unit = {
-    println(s"Inserting ${col.length} items into $name")
-    val _ = Util.db.run(DBIO.sequence(col.map(a => linkTable.insertOrUpdate((0L, a))))).v
-  }
+      def insert(col: ParSeq[String], table: TableQuery[Links]): Unit = {
+        println(s"Inserting ${col.length} items into $name")
+        val _ = Util.db.run(DBIO.sequence(col.toIterator.map(a => table.insertOrUpdate((0L, a))))).v
+      }
 
-  def insert(col: ParSeq[String]): Unit = {
-    println(s"Inserting ${col.length} items into $name")
-    val _ = Util.db.run(DBIO.sequence(col.toIterator.map(a => linkTable.insertOrUpdate((0L, a))))).v
-  }
+      def get(table: TableQuery[Links]) = Util.db.run(table.result.map(_.map(_._2))).v.toSet.par
+    }
 
-  def get = Util.db.run(linkTable.result.map(_.map(_._2))).v.toSet.par
+    Table
+  }
 }
