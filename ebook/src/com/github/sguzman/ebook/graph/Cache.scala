@@ -11,7 +11,7 @@ import scalaj.http.Http
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-import scala.collection.parallel.immutable.ParSeq
+import scala.collection.parallel.immutable.{ParSeq, ParSet}
 import scala.util.{Failure, Success}
 
 object Cache {
@@ -103,8 +103,9 @@ object Cache {
         val retVals: ParSeq[B] = htmlBody.flatMap(body)
 
         val insertIfAbsent = IO {
-          val incumbent = table.get
-          val diff = retVals.toSet.diff(incumbent)
+          val incumbent: ParSet[B] = table.get
+          val newVals: ParSet[B] = retVals.toSet[B]
+          val diff: ParSet[B] = newVals.diff(incumbent)
           table.insert(diff)
         }
 

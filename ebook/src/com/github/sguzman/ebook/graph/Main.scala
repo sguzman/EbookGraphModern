@@ -5,6 +5,8 @@ import com.github.sguzman.ebook.graph.sql.Links
 import com.github.sguzman.ebook.graph.wrap.DocWrap._
 import com.github.sguzman.ebook.graph.wrap.StrWrap._
 
+import scala.language.reflectiveCalls
+
 object Main {
   def main(args: Array[String]): Unit = {
     val _ = Sync {
@@ -15,6 +17,8 @@ object Main {
         val links = "div.thumbnail > a[href]"
         doc.flatMap(links).map(_.attr("href"))
       } (a => s"https://www.foxebook.net/page/$a/?sort=default")
+
+      println(links)
     }
   }
 }
