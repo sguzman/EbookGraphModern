@@ -18,7 +18,7 @@ object Ebooks {
       def title = column[String]("title")
       def date = column[String]("date")
       def img = column[String]("img")
-      def ebookId = column[Int]("ebook_id")
+      def ebookId = column[Int]("ebook_id", O.Unique)
       def desc = column[String]("desc")
       def publisher = column[String]("publisher")
       def authors = column[String]("author")
@@ -51,7 +51,10 @@ object Ebooks {
         val _ = Util.db.run(DBIO.sequence(col.toIterator.map(a => table.insertOrUpdate((0L, a._2, a._3 ,a._4, a._5, a._6, a._7, a._8, a._9, a._10, a._11, a._12, a._13, a._14, a._15))))).v
       }
 
-      override def get: ParSet[Row] = Util.db.run(table.result.map(_.map(a => a))).v.toSet.par
+      override def get: ParSet[Row] = Util.db.run(table.result.map(_.map({
+        case (_, title, date, img, ebookId, desc, publisher, authors, pubDate, isbn10, isbn13, pages, format, size, sizeType) =>
+          (0L, title, date, img, ebookId, desc, publisher, authors, pubDate, isbn10, isbn13, pages, format, size, sizeType)
+      }))).v.toSet.par
     }
 
     Table
