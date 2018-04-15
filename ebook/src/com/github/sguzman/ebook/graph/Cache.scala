@@ -4,11 +4,10 @@ import java.net.SocketTimeoutException
 
 import cats.effect.IO
 import com.github.sguzman.brotli.Brotli
-import com.github.sguzman.ebook.graph.sql.{Links, TableLike}
+import com.github.sguzman.ebook.graph.sql.TableLike
 import com.redis._
 import com.redis.serialization.Parse.Implicits._
 import scalaj.http.Http
-import slick.lifted.TableQuery
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -109,6 +108,7 @@ object Cache {
           table.insert(diff)
         }
 
+        insertIfAbsent.unsafeRunSync()
         retVals
       }
     }
