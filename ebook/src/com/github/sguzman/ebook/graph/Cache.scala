@@ -4,9 +4,11 @@ import java.net.SocketTimeoutException
 
 import cats.effect.IO
 import com.github.sguzman.brotli.Brotli
+import com.github.sguzman.ebook.graph.sql.Links
 import com.redis._
 import com.redis.serialization.Parse.Implicits._
 import scalaj.http.Http
+import slick.lifted.TableQuery
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -80,7 +82,7 @@ object Cache {
       private def get(key: String): (Option[String], String) =
         _get(incumbent, key)
 
-      def flatMap[A, B](col: ParSeq[A]) (body: String => Seq[B]) (toUrl: A => String): ParSeq[B]  = {
+      def flatMap[A, B, C](col: ParSeq[A], table: TableQuery[C])(body: String => Seq[B])(toUrl: A => String): ParSeq[B]  = {
         val results: ParSeq[(Option[String], String)] = col.map(toUrl).map(get)
         val (missing, htmlBody): (ParSeq[Option[String]], ParSeq[String]) = results.unzip
         val newValues: ParSeq[(String, String)] = missing
@@ -100,6 +102,13 @@ object Cache {
         furtherWrites.append(brotli)
 
         val retVals: ParSeq[B] = htmlBody.flatMap(body)
+
+        val insertIfAbsent = IO {
+          val incumbent = Links.table
+          val diff = retVals.toSet.diff(incumbent).toSeq
+          Links.insert(diff)
+        }
+
         retVals
       }
     }

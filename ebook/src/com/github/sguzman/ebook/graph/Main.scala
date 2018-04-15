@@ -17,12 +17,6 @@ object Main {
         doc.flatMap(links).map(_.attr("href"))
       } (a => s"https://www.foxebook.net/page/$a/?sort=default")
 
-      val insertIfAbsent = IO {
-        val incumbent = Links.get
-        val diff = links.toSet.diff(incumbent).toSeq
-        Links.insert(diff)
-      }
-
       insertIfAbsent.unsafeRunSync()
     }
   }
