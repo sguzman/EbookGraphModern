@@ -8,7 +8,7 @@ import scala.collection.parallel.ParSeq
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object Links {
-  private lazy val table = identity {
+  lazy val table = identity {
     val name = "links"
     private final case class Links(tag: Tag) extends Table[(Long, String)](tag, name) {
       def id = column[Long]("id", O.Unique, O.PrimaryKey, O.AutoInc)
