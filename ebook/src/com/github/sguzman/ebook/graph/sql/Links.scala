@@ -1,6 +1,5 @@
 package com.github.sguzman.ebook.graph.sql
 
-import cats.effect.IO
 import com.github.sguzman.ebook.graph.wrap.FutureWrap._
 import slick.jdbc.PostgresProfile.api._
 import slick.jdbc.meta.MTable
@@ -36,12 +35,12 @@ object Links {
 
   def insert(col: Seq[String]): Unit = {
     println(s"Inserting ${col.length} items into $name")
-    val _: Unit = Util.db.run(DBIO.sequence(col.map(a => linkTable.insertOrUpdate(0L, a)))).v
+    val _ = Util.db.run(DBIO.sequence(col.map(a => linkTable.insertOrUpdate((0L, a))))).v
   }
 
   def insert(col: ParSeq[String]): Unit = {
     println(s"Inserting ${col.length} items into $name")
-    val _: Unit = Util.db.run(DBIO.sequence(col.toIterator.map(a => linkTable.insertOrUpdate(0L, a)))).v
+    val _ = Util.db.run(DBIO.sequence(col.toIterator.map(a => linkTable.insertOrUpdate((0L, a))))).v
   }
 
   def get = Util.db.run(linkTable.result.map(_.map(_._2))).v.toSet.par
