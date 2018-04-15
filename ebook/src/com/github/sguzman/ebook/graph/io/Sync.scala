@@ -2,17 +2,11 @@ package com.github.sguzman.ebook.graph.io
 
 import scala.util.{Failure, Success}
 
-object Sync {
-  def apply[A](a: => A, handle: Throwable => Unit = e => throw e): Sync = new Sync().apply(a, handle)
-}
+case class Sync[A](a: A) {
+  def ~[B](f: A => B): Sync[B] = Sync(f(a))
 
-class Sync {
-  def ~[A](a: => A, handle: Throwable => Unit = e => throw e): Sync = new Sync().apply(a, handle)
-
-  def apply[A](a: => A, handle: Throwable => Unit = e => throw e): Sync = util.Try(a) match {
-    case Success(_) => new Sync()
-    case Failure(e) =>
-      handle(e)
-      new Sync()
+  def apply[B](b: => B): Sync[B] = util.Try(a) match {
+    case Success(_) => Sync(b)
+    case Failure(e) => throw e
   }
 }

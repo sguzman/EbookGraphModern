@@ -9,16 +9,16 @@ import scala.language.reflectiveCalls
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val _ = Sync {
+    Sync {
       val pages = 1 to 623
 
-      val links = Cache.get.flatMap(pages.par, Links.table) { body =>
+      Cache.get.flatMap(pages.par, Links.table) { body =>
         val doc = body.doc
         val links = "div.thumbnail > a[href]"
         doc.flatMap(links).map(_.attr("href"))
       } (a => s"https://www.foxebook.net/page/$a/?sort=default")
+    } ~ {links =>
 
-      println(links)
     }
   }
 }
