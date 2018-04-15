@@ -64,7 +64,7 @@ object Cache {
     }
   }
 
-  private def _get(cache: Map[String, Array[Byte]], key: String, client: RedisClient) =
+  private def _get(cache: Map[String, Array[Byte]], key: String) =
     cache.get(key) match {
       case None =>
         println(s"Miss Http cache for key $key")
@@ -76,7 +76,7 @@ object Cache {
     }
 
   private def get(key: String) =
-    _get(cachingService._1, key, cachingService._3)
+    _get(cachingService._1, key)
 
   def flatMap[A, B](col: ParSeq[A]) (body: String => Seq[B]) (toUrl: A => String)  = {
     val results = col.map(toUrl).map(get)
