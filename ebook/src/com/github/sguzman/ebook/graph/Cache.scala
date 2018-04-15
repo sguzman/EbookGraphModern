@@ -9,13 +9,13 @@ import com.redis.serialization.Parse.Implicits._
 import scalaj.http.Http
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.collection.parallel.immutable.ParSeq
 import scala.util.{Failure, Success}
 
 object Cache {
-  private val ns: String = "ebooks:http"
-
-  private lazy val cachingService = identity {
+  lazy val get  = identity {
+    val ns: String = "ebooks:http"
     val redis: RedisClient = new RedisClient(host = "localhost", port = 6379)
     println("Init caching client...")
     val cache: Map[String, Array[Byte]] = redis.hgetall1[String, Array[Byte]](ns) match {
@@ -53,53 +53,57 @@ object Cache {
         println("Could not disconnect")
     }))
 
-    (cache, shells, redis)
-  }
+    object CacheMeOutside {
+      val incumbent: Map[String, Array[Byte]] = cache
+      val furtherWrites: ListBuffer[ParSeq[(String, Array[Byte])]] = shells
+      val client: RedisClient = redis
 
-  private def http(url: String): String = util.Try(Http(url).asString) match {
-    case Success(v) => v.body
-    case Failure(e) => e match {
-      case _: SocketTimeoutException => http(url)
-      case _ => throw e
+      private def http(url: String): String = util.Try(Http(url).asString) match {
+        case Success(v) => v.body
+        case Failure(e) => e match {
+          case _: SocketTimeoutException => http(url)
+          case _ => throw e
+        }
+      }
+
+      private def _get(cache: Map[String, Array[Byte]], key: String): (Option[String], String) =
+        cache.get(key) match {
+          case None =>
+            println(s"Miss Http cache for key $key")
+            val body: String = http(key)
+            (Some(key), body)
+          case Some(v) =>
+            println(s"Hit Http cache for key $key")
+            (None, Brotli.decompress(v))
+        }
+
+      private def get(key: String): (Option[String], String) =
+        _get(incumbent, key)
+
+      def flatMap[A, B](col: ParSeq[A]) (body: String => Seq[B]) (toUrl: A => String): ParSeq[B]  = {
+        val results: ParSeq[(Option[String], String)] = col.map(toUrl).map(get)
+        val (missing, htmlBody): (ParSeq[Option[String]], ParSeq[String]) = results.unzip
+        val newValues: ParSeq[(String, String)] = missing
+          .zipWithIndex
+          .filter(_._1.isDefined)
+          .map(a => (a._1.get, a._2))
+          .map(a => (a._1, htmlBody(a._2)))
+
+        val brotli: ParSeq[(String, Array[Byte])] = newValues.map(a => {
+          val key = a._1
+          println(s"Compressing html body for key $key")
+          val body = Brotli.compress(a._2)
+          (key, body)
+        })
+
+        println(s"${brotli.length} new http cache entries in this session")
+        furtherWrites.append(brotli)
+
+        val retVals: ParSeq[B] = htmlBody.flatMap(body)
+        retVals
+      }
     }
+
+    CacheMeOutside
   }
-
-  private def _get(cache: Map[String, Array[Byte]], key: String) =
-    cache.get(key) match {
-      case None =>
-        println(s"Miss Http cache for key $key")
-        val body: String = http(key)
-        (Some(key), body)
-      case Some(v) =>
-        println(s"Hit Http cache for key $key")
-        (None, Brotli.decompress(v))
-    }
-
-  private def get(key: String) =
-    _get(cachingService._1, key)
-
-  def flatMap[A, B](col: ParSeq[A]) (body: String => Seq[B]) (toUrl: A => String)  = {
-    val results = col.map(toUrl).map(get)
-    val shells = cachingService._2
-    val (missing, htmlBody) = results.unzip
-    val newValues = missing
-      .zipWithIndex
-      .filter(_._1.isDefined)
-      .map(a => (a._1.get, a._2))
-      .map(a => (a._1, htmlBody(a._2)))
-
-    val brotli = newValues.map(a => {
-      val key = a._1
-      println(s"Compressing html body for key $key")
-      val body = Brotli.compress(a._2)
-      (key, body)
-    })
-
-    println(s"${brotli.length} new http cache entries in this session")
-    shells.append(brotli)
-
-    val retVals = htmlBody.flatMap(body)
-    retVals
-  }
-
 }

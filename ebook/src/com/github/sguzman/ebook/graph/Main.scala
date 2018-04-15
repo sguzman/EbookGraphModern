@@ -11,7 +11,7 @@ object Main {
     val _ = Sync {
       val pages = 1 to 623
 
-      val links = Cache.flatMap(pages.par) {body =>
+      val links = Cache.get.flatMap(pages.par) {body =>
         val doc = body.doc
         val links = "div.thumbnail > a[href]"
         doc.flatMap(links).map(_.attr("href"))
