@@ -1,6 +1,5 @@
 package com.github.sguzman.ebook.graph.sql
 
-import scala.collection.parallel.ParSeq
 import scala.collection.parallel.immutable.ParSet
 
 trait TableLike[A] {
