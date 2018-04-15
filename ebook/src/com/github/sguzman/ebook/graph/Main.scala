@@ -55,7 +55,7 @@ object Main {
         ((0L, title, date, img, id, desc, publisher, author, pubDate, isbn10, isbn13, pages, format, size, sizeType), (a: Row) => (a, relatedPosts, categories, prev, next))
       } (identity)
     } ~ {data =>
-      println(data)
+      data
     }
   }
 }
