@@ -28,16 +28,21 @@ object Cache {
         v
     }
 
-    val shells: mutable.ListBuffer[ParSeq[(String, Array[Byte])]] = mutable.ListBuffer()
+    val shells: mutable.ListBuffer[ParSeq[(String, String)]] = mutable.ListBuffer()
     Runtime.getRuntime.addShutdownHook(new Thread(() => {
       println(s"Writing ${shells.length} sessions worth of cache entries...")
-      val toWrite = shells.map(_.toIndexedSeq).flatMap(a => a.map(a => IO{
+      val toWrite = shells.flatMap(a => a.map{b =>
+          val key = b._1
+          println(s"Compressing html body for key $key")
+          val body = Brotli.compress(b._2)
+          (key, body)
+      }).map(a => IO{
         val key = a._1
         val value = a._2
 
         println(s"Inserting key $key into hash $ns with value of length ${value.length}")
         redis.hset(ns, a._1, a._2)
-      }))
+      })
 
       println(s"${toWrite.length} new entries in total")
 
@@ -56,7 +61,7 @@ object Cache {
 
     object CacheMeOutside {
       val incumbent: Map[String, Array[Byte]] = cache
-      val furtherWrites: ListBuffer[ParSeq[(String, Array[Byte])]] = shells
+      val furtherWrites: ListBuffer[ParSeq[(String, String)]] = shells
       val client: RedisClient = redis
 
       private def http(url: String): String = util.Try(Http(url).asString) match {
@@ -90,15 +95,8 @@ object Cache {
           .map(a => (a._1.get, a._2))
           .map(a => (a._1, htmlBody(a._2)))
 
-        val brotli: ParSeq[(String, Array[Byte])] = newValues.map(a => {
-          val key = a._1
-          println(s"Compressing html body for key $key")
-          val body = Brotli.compress(a._2)
-          (key, body)
-        })
-
-        println(s"${brotli.length} new http cache entries in this session")
-        furtherWrites.append(brotli)
+        println(s"${newValues.length} new http cache entries in this session")
+        furtherWrites.append(newValues)
 
         val retVals: ParSeq[B] = htmlBody.flatMap(body)
 
@@ -122,15 +120,8 @@ object Cache {
           .map(a => (a._1.get, a._2))
           .map(a => (a._1, htmlBody(a._2)))
 
-        val brotli: ParSeq[(String, Array[Byte])] = newValues.map(a => {
-          val key = a._1
-          println(s"Compressing html body for key $key")
-          val body = Brotli.compress(a._2)
-          (key, body)
-        })
-
-        println(s"${brotli.length} new http cache entries in this session")
-        furtherWrites.append(brotli)
+        println(s"${newValues.length} new http cache entries in this session")
+        furtherWrites.append(newValues)
 
         val dataCode = htmlBody.map(body)
         val (retVals, _) = dataCode.unzip
