@@ -4,7 +4,7 @@ import com.github.sguzman.ebook.graph.wrap.FutureWrap._
 import slick.jdbc.PostgresProfile.api._
 import slick.jdbc.meta.MTable
 
-import scala.collection.parallel.ParSeq
+import scala.collection.parallel.immutable.ParSet
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object Links {
@@ -30,13 +30,8 @@ object Links {
 
     created.v
     object Table extends TableLike[Links] {
-      override def insert(col: Seq[String]): Unit = {
-        println(s"Inserting ${col.length} items into $name")
-        val _ = Util.db.run(DBIO.sequence(col.map(a => table.insertOrUpdate((0L, a))))).v
-      }
-
-      override def insert(col: ParSeq[String]): Unit = {
-        println(s"Inserting ${col.length} items into $name")
+      override def insert(col: ParSet[String]): Unit = {
+        println(s"Inserting ${col.size} items into $name")
         val _ = Util.db.run(DBIO.sequence(col.toIterator.map(a => table.insertOrUpdate((0L, a))))).v
       }
 

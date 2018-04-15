@@ -104,9 +104,9 @@ object Cache {
         val retVals: ParSeq[B] = htmlBody.flatMap(body)
 
         val insertIfAbsent = IO {
-          val incumbent = table.get()
-          val diff = retVals.toSet.diff(incumbent).toSeq
-          Links.insert(diff)
+          val incumbent = table.get
+          val diff = retVals.toSet.diff(incumbent)
+          table.insert(diff)
         }
 
         retVals
