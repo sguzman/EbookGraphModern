@@ -113,7 +113,7 @@ object Cache {
         retVals
       }
 
-      def map[A, B, C](col: ParSeq[A], table: TableLike[C, B])(body: String => B)(toUrl: A => String): ParSeq[B]  = {
+      def map[A, B, C, D](col: ParSeq[A], table: TableLike[C, B])(body: String => (B, B => D))(toUrl: A => String): ParSeq[D]  = {
         val results: ParSeq[(Option[String], String)] = col.map(toUrl).map(get)
         val (missing, htmlBody): (ParSeq[Option[String]], ParSeq[String]) = results.unzip
         val newValues: ParSeq[(String, String)] = missing
@@ -132,7 +132,8 @@ object Cache {
         println(s"${brotli.length} new http cache entries in this session")
         furtherWrites.append(brotli)
 
-        val retVals: ParSeq[B] = htmlBody.map(body)
+        val dataCode = htmlBody.map(body)
+        val (retVals, _) = dataCode.unzip
 
         val insertIfAbsent = IO {
           val incumbent: ParSet[B] = table.get
@@ -142,7 +143,7 @@ object Cache {
         }
 
         insertIfAbsent.unsafeRunSync()
-        retVals
+        dataCode.map(a => a._2(a._1))
       }
     }
 
