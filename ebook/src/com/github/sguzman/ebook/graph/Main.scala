@@ -10,15 +10,15 @@ import scala.language.reflectiveCalls
 object Main {
   def main(args: Array[String]): Unit = {
     Sync {
-      val pages = 1 to 623
+      val pages = 1 to 1260
 
       Cache.get.flatMap(pages.par, Links.table) { body =>
         val doc = body.doc
-        val links = "div.thumbnail > a[href]"
+        val links = "article.post > div.post-inner > div.post-content > div.post-header > h2.post-title > a[href]"
         doc.flatMap(links).map(_.attr("href"))
-      } (a => s"https://www.foxebook.net/page/$a/?sort=default")
+      } (a => s"https://it-eb.com/page/$a/")
     } ~ {links =>
-
+      links
     }
   }
 }
