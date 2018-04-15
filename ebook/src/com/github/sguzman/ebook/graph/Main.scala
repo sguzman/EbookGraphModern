@@ -11,16 +11,14 @@ object Main {
     val _ = Sync {
       val pages = 1 to 623
 
-      val incumbent = Links.get
-      val links = pages.par.flatMap{a =>
-        val url = s"https://www.foxebook.net/page/$a/?sort=default"
-        val body = Cache.get(url)
+      val links = Cache.flatMap(pages.par) {body =>
         val doc = body.doc
         val links = "div.thumbnail > a[href]"
         doc.flatMap(links).map(_.attr("href"))
-      }
+      } (a => s"https://www.foxebook.net/page/$a/?sort=default")
 
       val insertIfAbsent = IO {
+        val incumbent = Links.get
         val diff = links.toSet.diff(incumbent).toSeq
         Links.insert(diff)
       }
