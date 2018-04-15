@@ -30,17 +30,17 @@ object Links {
 
     created.v
     object Table extends TableLike[Links] {
-      def insert(col: Seq[String], table: TableQuery[Links]): Unit = {
+      override def insert(col: Seq[String]): Unit = {
         println(s"Inserting ${col.length} items into $name")
         val _ = Util.db.run(DBIO.sequence(col.map(a => table.insertOrUpdate((0L, a))))).v
       }
 
-      def insert(col: ParSeq[String], table: TableQuery[Links]): Unit = {
+      override def insert(col: ParSeq[String]): Unit = {
         println(s"Inserting ${col.length} items into $name")
         val _ = Util.db.run(DBIO.sequence(col.toIterator.map(a => table.insertOrUpdate((0L, a))))).v
       }
 
-      def get(table: TableQuery[Links]) = Util.db.run(table.result.map(_.map(_._2))).v.toSet.par
+      override def get = Util.db.run(table.result.map(_.map(_._2))).v.toSet.par
     }
 
     Table
