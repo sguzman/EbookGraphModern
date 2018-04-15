@@ -9,7 +9,7 @@ import scala.language.reflectiveCalls
 
 object Main {
   def main(args: Array[String]): Unit = {
-    Sync {
+    val _ = Sync {
       val pages = 1 to 1260
 
       Cache.get.flatMap(pages.par, Links.table) { body =>
